@@ -1,0 +1,180 @@
+#!/usr/bin/env zsh
+
+emulate -L zsh -o err_return -o no_unset -o warn_create_global -o extended_glob
+
+() {
+
+(( ARGC > 4 ))
+
+zmodload zsh/zselect
+
+unset user
+typeset -gr user=$1
+local -r root_dir=${ZSH_SCRIPT:A:h:h}
+local -r privileged=$2
+local -r config_dir=$3
+local -r cfg=$4
+shift 4
+
+print -r -- "==> setting up user $user ${cfg:+with $cfg }..."
+
+local cmds=(ps rm cp chown sudo zsh tee)
+(( privileged )) && cmds+=(cat visudo)
+
+case $OSTYPE in
+  darwin*)
+    function try-delete-user() {
+      command dscl . -delete /Users/$user             || true
+      ! command dscl . -list /Users/$user             || return
+      command rm -rf -- /Users/$user                  || return
+      command rm -f -- /private/etc/sudoers.d/$user   || return
+      [[ ! -e /Users/$user                 ]]         || return
+      [[ ! -e /private/etc/sudoers.d/$user ]]         || return
+    }
+    local -r home=/Users/$user
+    cmds+=(dscl)
+  ;;
+  linux*)
+    function try-delete-user() {
+      command userdel -rf $user             || true
+      command rm -f -- /etc/sudoers.d/$user || return
+      [[ ! -e /home/$user ]]                || return
+      ! command getent passwd $user         || return
+    }
+    local -r home=/home/$user
+    cmds+=(userdel getent useradd passwd)
+  ;;
+  *)
+    print -ru2 -- "${ZSH_SCRIPT:t}: unsupported OS: ${(q-)OSTYPE}"
+    return 1
+  ;;
+esac
+
+() {
+  local cmd
+  for cmd in $cmds; do
+    if [[ ! -v commands[$cmd] ]]; then
+      print -ru2 -- "${ZSH_SCRIPT:t}: command not found: ${(q-)cmd}"
+      return 1
+    fi
+  done
+}
+
+if [[ ${ZSH_SCRIPT:A} == ${home:A}/* ]]; then
+  print -ru2 -- "${ZSH_SCRIPT:t}: cannot execute zsh-bench when it's under $home"
+  return 1
+fi
+
+() {
+  local -a ps
+  if ps=(${(f)"$(command ps -u $user -o tty= 2>/dev/null)"}) &&
+     (( ps[(I)${(b)TTY#/dev/}[[:space:]]#] )); then
+    print -ru2 -- "${ZSH_SCRIPT:t}: user $user is logged in on this TTY"
+    return 1
+  fi
+}
+
+function delete-user() {
+  local -a pids
+  local -i delay
+  for delay in {0..4}; do
+    zselect -t $((100 * ((1 << delay) - 1))) || true
+    if pids=($(command ps -u $user -o pid= 2>/dev/null)) && (( $#pids )); then
+      local sig=
+      (( delay > 2 )) && sig=-9
+      kill $sig -- $pids || true
+      (( delay < 4 )) && continue
+    fi
+    {
+      { command rm -rf -- '' /tmp/**/*(Nu[$user]) } 2>/dev/null || true
+    } always {
+      TRY_BLOCK_ERROR=0
+    }
+    try-delete-user &>/dev/null && return
+  done
+  print -ru2 -- "${ZSH_SCRIPT:t}: cannot delete user $user"
+  return 1
+}
+
+delete-user
+
+function cleanup() {
+  if [[ $1 != EXIT ]]; then
+    print -ru2 -- "${ZSH_SCRIPT:t}: SIG$1: cleaning up..."
+  fi
+  {
+    delete-user
+  } always {
+    [[ $1 == EXIT ]] || exit $((127 + ${signals[(Ie)$1]}))
+  }
+}
+
+local sig trapped=(${${(A)=:-INT TERM HUP EXIT}:*signals})
+for sig in $trapped; do
+  trap "trap - $trapped; cleanup $sig" $sig
+done
+unset sig trapped
+
+if [[ $OSTYPE == darwin* ]]; then
+  local -a lines
+  lines=(${(f)"$(command dscl . -readall /Users UniqueID)"})
+  local -i id gap prev=1000
+  for id in ${(on)${${(M)lines:#UniqueID: <1001->}#* }}; do
+    if (( id != prev + 1 )); then
+      (( gap = prev + 1 ))
+      break
+    fi
+    (( prev = id ))
+  done
+  (( gap || (gap = prev + 1) ))
+  command dscl . -create $home
+  command dscl . -create $home UserShell =zsh
+  command dscl . -create $home RealName "Zsh Bench User"
+  command dscl . -create $home UniqueID $gap
+  command dscl . -create $home PrimaryGroupID 20
+  command dscl . -create $home NFSHomeDirectory $home
+  command mkdir -- $home
+  local group=staff
+  local sudoersd=/private/etc/sudoers.d
+else
+  command useradd -ms =zsh $user
+  command passwd -qd $user
+  command rm -rf -- '' $home/*(ND)
+  local group=$user
+  local sudoersd=/etc/sudoers.d
+fi
+
+command mkdir -- $home/zsh-bench
+command cp -r -- $root_dir/^(.git|configs)(D) $home/zsh-bench/
+command cp -r -- $config_dir $home/zsh-bench/configs
+if [[ -z $cfg ]]; then
+  command cp -r -- $root_dir/configs/minimal $home/zsh-bench/internal/
+fi
+command chown -R ${user}:${group} $home
+if [[ -z $cfg ]]; then
+  command sudo -u $user -- $home/zsh-bench/internal/minimal/setup
+fi
+
+if (( privileged )); then
+  command cat >$sudoersd/$user <<<"$user ALL=(ALL) NOPASSWD:ALL"
+  command chmod 440 $sudoersd/$user
+  command visudo -cq || command visudo -c
+fi
+
+command sudo -u $user tee $home/.gitconfig >/dev/null <<\END
+[user]
+  name = Zsh Bench
+  email = zsh-bench@example.com
+[init]
+  defaultBranch = master
+END
+
+local cmd=(
+  ${(f)"$(typeset -pm 'LC_*|LANG|LANGUAGE')"}
+  'typeset -gaU path=("${path[@]}" ~/zsh-bench)'
+  'cd'
+  ${cfg:+'~/zsh-bench/configs/'${(qqq)cfg}'/setup'}
+  $@)
+sudo -Hu $user =zsh -c -- ${(j: && :)cmd}
+
+} "$@"

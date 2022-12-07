@@ -1,0 +1,125 @@
+#!/usr/bin/env zsh
+
+() {
+  builtin emulate -L zsh -o err_exit -o no_unset -o warn_create_global || builtin exit
+
+  if [[ -v _zb_benchmark_input_fd ]]; then
+    builtin zle -F $_zb_benchmark_input_fd
+    # This sometimes returns an error with no diagnostics even though
+    # the fd gets closed successfully. For example, it happens when
+    # using ohmyzsh with ZSH_THEME=af-magic.
+    builtin exec {_zb_benchmark_input_fd}>&- || builtin true
+    unset _zb_benchmark_input_fd
+  else
+    (( $# == 4 )) || builtin exit
+    builtin typeset -gr  _zb_benchmark_input_output_file=$1
+    builtin typeset -gr  _zb_benchmark_input_fifo_file=$2
+    builtin typeset -gr  _zb_benchmark_input_buffer=$3
+    builtin typeset -gi  _zb_benchmark_input_num_runs=$4
+
+    builtin zmodload zsh/datetime zsh/zselect
+    builtin zselect -t 70 || builtin true
+    builtin typeset -gi _zb_benchmark_input_fd
+    builtin exec {_zb_benchmark_input_fd} </dev/null
+    builtin zle -F $_zb_benchmark_input_fd -zb-benchmark-input
+
+    -zb-benchmark-input-ready() {
+      builtin emulate -L zsh -o no_unset -o warn_create_global || builtin exit
+      if [[ -v ZINIT_SICE && -v ZINIT_REGISTERED_PLUGINS ]]; then
+        builtin local requested loaded missing
+        requested=(${(kou)ZINIT_SICE})
+        loaded=(${(ou)ZINIT_REGISTERED_PLUGINS})
+        missing=(${requested:|loaded})
+        (( ! $#missing )) || builtin return
+      fi
+      [[ -z ${_zsh_defer_tasks-} ]]
+    }
+  fi
+} "$@"
+
+[[ -v _zb_benchmark_input_fd ]] && builtin return
+
+if ! -zb-benchmark-input-ready; then
+  builtin typeset -gi _zb_benchmark_input_fd
+  builtin exec {_zb_benchmark_input_fd} < <(builtin zselect -t 10) || builtin exit
+  builtin zle -F $_zb_benchmark_input_fd -zb-benchmark-input || builtin exit
+  builtin return
+fi
+
+builtin emulate -L zsh -o err_exit -o no_unset -o warn_create_global || builtin exit
+
+if [[ -v widgets[zle-line-pre-redraw] ]]; then
+  builtin zle -A -- zle-line-pre-redraw -zb-benchmark-input-orig-zle-line-pre-redraw
+else
+  -zb-benchmark-input-do-nothing() {}
+  builtin zle -N -- -zb-benchmark-input-orig-zle-line-pre-redraw -zb-benchmark-input-do-nothing
+fi
+
+builtin zle -N -- zle-line-pre-redraw -zb-benchmark-input-zle-line-pre-redraw
+
+-zb-benchmark-input-init() {
+  -zb-benchmark-input-zle-line-pre-redraw() {
+    builtin zle -- -zb-benchmark-input-orig-zle-line-pre-redraw "$@" || builtin true
+    builtin emulate -L zsh -o err_exit -o no_unset -o warn_create_global || builtin exit
+    [[ $_zb_benchmark_input_buffer == ${BUFFER}?* ]]
+    if (( ! $+_zb_benchmark_input_fd && $#BUFFER + 1 == $#_zb_benchmark_input_buffer )); then
+      builtin typeset -gi _zb_benchmark_input_fd
+      builtin exec {_zb_benchmark_input_fd} </dev/null
+      builtin zle -F $_zb_benchmark_input_fd -zb-benchmark-input-start
+    fi
+  }
+}
+
+-zb-benchmark-input-start() {
+  builtin emulate -L zsh -o err_exit -o no_unset -o warn_create_global || builtin exit
+
+  builtin zle -F $_zb_benchmark_input_fd
+
+  -zb-benchmark-input-zle-line-pre-redraw() {
+    builtin zle -- -zb-benchmark-input-orig-zle-line-pre-redraw "$@"
+    if (( ${#BUFFER} == ${#_zb_benchmark_input_buffer} )); then
+      -zb-benchmark-input-zle-line-pre-redraw() {
+        builtin zle -- -zb-benchmark-input-orig-zle-line-pre-redraw "$@"
+      }
+      builtin zle -F $_zb_benchmark_input_fd -zb-benchmark-input-end
+    fi
+  }
+
+  builtin : >>$_zb_benchmark_input_fifo_file
+  builtin : <$_zb_benchmark_input_fifo_file
+  builtin zselect -t 10 || builtin true
+  builtin typeset -gF _zb_benchmark_input_start_time=EPOCHREALTIME
+}
+
+-zb-benchmark-input-end() {
+  builtin local -F end_time=EPOCHREALTIME
+
+  builtin emulate -L zsh -o err_exit -o no_unset -o warn_create_global || builtin exit
+
+  builtin zle -F $_zb_benchmark_input_fd
+  builtin exec {_zb_benchmark_input_fd}>&-
+  builtin unset _zb_benchmark_input_fd
+
+  builtin local -F3 t='1e3 * (end_time - _zb_benchmark_input_start_time)'
+  builtin print -rn -- " $t" >>| $_zb_benchmark_input_output_file
+
+  builtin zle .kill-buffer -w
+  builtin zle -R
+
+  if (( --_zb_benchmark_input_num_runs )); then
+    -zb-benchmark-input-init
+  else
+    builtin zle -D -- zle-line-pre-redraw
+    if [[ ! -v functions[-zb-benchmark-input-do-nothing] ]]; then
+      builtin zle -A -- -zb-benchmark-input-orig-zle-line-pre-redraw zle-line-pre-redraw
+    fi
+    -zb-benchmark-prompt
+  fi
+
+  builtin : >>$_zb_benchmark_input_fifo_file
+  builtin : <$_zb_benchmark_input_fifo_file
+}
+
+-zb-benchmark-input-init
+builtin : >>$_zb_benchmark_input_fifo_file
+builtin : <$_zb_benchmark_input_fifo_file
