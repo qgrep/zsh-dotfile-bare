@@ -1,0 +1,35 @@
+[Animation]
+Frames=0
+
+[Appearance]
+Skin=dNk-green
+SkinInstalledWithKns=true
+TerminalHighlightOnManualActivation=true
+Translucency=true
+
+[Dialogs]
+FirstRun=false
+
+[Notification Messages]
+ShowPasteHugeTextWarning=false
+
+[Shortcuts]
+decrease-window-height=Ctrl+Shift+Up
+decrease-window-width=Ctrl+Shift+Right
+increase-window-height=Alt+Shift+Down; Ctrl+Shift+Down
+increase-window-width=Ctrl+Shift+Left;\s
+move-session-left=none
+move-session-right=none
+next-session=Ctrl+Up
+next-terminal=Ctrl+Right
+options_configure=none
+previous-session=Ctrl+Down
+previous-terminal=Ctrl+Left
+split-left-right=Ctrl+>
+split-top-bottom=Ctrl+_
+toggle-window-state=none
+
+[Window]
+Height=83
+Position=100
+Width=70

@@ -58,6 +58,7 @@ export ZSH_THEME="powerlevel10k/powerlevel10k"
 	#if source /home/xmg/.zsh/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel10k.zsh-theme 2> /dev/null
 	#then
 		s=' ' # fix too wide icons
+    POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true
 		POWERLEVEL9K_MODE=nerdfont-complete
 		POWERLEVEL9K_SHORTEN_STRATEGY=truncate_beginning
 		POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
@@ -122,6 +123,12 @@ export ZSH_THEME="powerlevel10k/powerlevel10k"
 	#	echo '\033[33m[ ! ]\033[0m ZSH powerlevel10k not installed'
 	#fi
   #fi
+
+
+
+
+
+  
 # export NVM_DIR="$HOME/.nvm"
 # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

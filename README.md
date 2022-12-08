@@ -31,7 +31,7 @@ Now all the dotfiles from the repository are installed in your home directory. H
 To interact with the bare Git repository, you need the following alias:
 
 ~~~bash
-alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
+alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 ~~~
 
 Note: the [`.bashrc`](https://github.com/weibeld/dotfiles/blob/master/.bashrc) file in the dotfile repository already contains this alias definition, so you're fine to go.
