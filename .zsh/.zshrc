@@ -9,10 +9,15 @@
 #  Tastenbelegungen                                             #
 #  zur interaktiven Nutzung etc.                                #
 #################################################################
+export ZSH=${HOME}/.oh-my-zsh
+export ZDOTDIR=${HOME}/.zsh
 
-#!/usr/bin/env zsh
+# .zsh
+export ZDOTCONFIGDIR=${ZDOTDIR}/config
+export ZDOTPLUGINSDIR=${ZDOTDIR}/plugins
+export ZFUNC=${ZDOTDIR}/zfunc
+export COMPLETION=${ZDOTDIR}/completion
 
-# Splitting the Zsh settings
 for file in $ZDOTCONFIGDIR/**/*(.N)
 do 
     source "$file" > /dev/null 2>&1 && echo "config file load: $file"
@@ -24,6 +29,121 @@ for file in $ZFUNC/**/*(.N)
 do 
     source "$file"  && echo "zfunc file load: $file"
 done
+
+# all of our zsh files
+typeset -U config_files
+#config_files=($ZSH/**/*.zsh)
+
+# load the path files
+for file in ${(M)config_files:#*/path.zsh}
+do
+     source "$file"  && echo "zfunc file load: $file"
+done
+
+  #fpath=($ZCOMPLETION$fpath)
+
+
+#for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
+#do
+#  source $file
+#done
+
+# oh-my-posh theme
+#if [[  -f ~/.poshthemes/kushal.omp.json ]]; then 
+# eval "$(oh-my-posh --init --shell zsh --config ~/.poshthemes/kushal.omp.json)" 
+#fi
+export ZSH_THEME="powerlevel10k/powerlevel10k"
+#if ! [[ $(tty) = /dev/tty* ]]
+#then
+	#if source /home/xmg/.zsh/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel10k.zsh-theme 2> /dev/null
+	#then
+		s=' ' # fix too wide icons
+    POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true
+		POWERLEVEL9K_MODE=nerdfont-complete
+		POWERLEVEL9K_SHORTEN_STRATEGY=truncate_beginning
+		POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
+		POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+		POWERLEVEL9K_RPROMPT_ON_NEWLINE=true
+		POWERLEVEL9K_SHORTEN_DIR_LENGTH=2
+		POWERLEVEL9K_OS_ICON_CONTENT_EXPANSION='${P9K_CONTENT} $(whoami | grep -v "^root\$")'
+		POWERLEVEL9K_OS_ICON_BACKGROUND=red
+		POWERLEVEL9K_OS_ICON_FOREGROUND=white
+		POWERLEVEL9K_ROOT_INDICATOR_BACKGROUND=black
+		POWERLEVEL9K_ROOT_INDICATOR_FOREGROUND=red
+		POWERLEVEL9K_SSH_BACKGROUND=white
+		POWERLEVEL9K_SSH_FOREGROUND=blue
+		POWERLEVEL9K_FOLDER_ICON=
+		POWERLEVEL9K_DIR_BACKGROUND=blue
+		POWERLEVEL9K_DIR_FOREGROUND=black
+		POWERLEVEL9K_DIR_WRITABLE_BACKGROUND=black
+		POWERLEVEL9K_DIR_WRITABLE_FOREGROUND=red
+		POWERLEVEL9K_VCS_CLEAN_FOREGROUND=black
+		POWERLEVEL9K_VCS_CLEAN_BACKGROUND=green
+		POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND=black
+		POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND=yellow
+		POWERLEVEL9K_VCS_MODIFIED_FOREGROUND=white
+		POWERLEVEL9K_VCS_MODIFIED_BACKGROUND=black
+		POWERLEVEL9K_VCS_UNTRACKED_ICON=●
+		POWERLEVEL9K_VCS_UNSTAGED_ICON=±
+		POWERLEVEL9K_VCS_INCOMING_CHANGES_ICON=↓
+		POWERLEVEL9K_VCS_OUTGOING_CHANGES_ICON=↑
+		POWERLEVEL9K_VCS_COMMIT_ICON=$s
+		POWERLEVEL9K_STATUS_VERBOSE=false
+		POWERLEVEL9K_STATUS_VERBOSE=false
+		POWERLEVEL9K_STATUS_OK_IN_NON_VERBOSE=true
+		POWERLEVEL9K_EXECUTION_TIME_ICON=$s
+		POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=0
+		POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND=black
+		POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND=blue
+		POWERLEVEL9K_COMMAND_BACKGROUND_JOBS_BACKGROUND=black
+		POWERLEVEL9K_COMMAND_BACKGROUND_JOBS_FOREGROUND=cyan
+		POWERLEVEL9K_TIME_ICON=
+		POWERLEVEL9K_TIME_FORMAT='%D{%I:%M}'
+		POWERLEVEL9K_TIME_BACKGROUND=black
+		POWERLEVEL9K_TIME_FOREGROUND=white
+		POWERLEVEL9K_RAM_ICON=
+		POWERLEVEL9K_RAM_FOREGROUND=black
+		POWERLEVEL9K_RAM_BACKGROUND=yellow
+		POWERLEVEL9K_VI_MODE_FOREGROUND=black
+		POWERLEVEL9K_VI_COMMAND_MODE_STRING=NORMAL
+		POWERLEVEL9K_VI_MODE_NORMAL_BACKGROUND=green
+		POWERLEVEL9K_VI_VISUAL_MODE_STRING=VISUAL
+		POWERLEVEL9K_VI_MODE_VISUAL_BACKGROUND=blue
+		POWERLEVEL9K_VI_OVERWRITE_MODE_STRING=OVERTYPE
+		POWERLEVEL9K_VI_MODE_OVERWRITE_BACKGROUND=red
+		POWERLEVEL9K_VI_INSERT_MODE_STRING=
+		POWERLEVEL9K_LEFT_PROMPT_FIRST_SEGMENT_START_SYMBOL='\uE0B2'
+		POWERLEVEL9K_RIGHT_PROMPT_LAST_SEGMENT_END_SYMBOL='\uE0B0'
+		POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX='%F{blue}╭─'
+		POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX='%F{blue}╰%f '
+		POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon root_indicator ssh dir dir_writable vcs)
+		POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(vi_mode status command_execution_time background_jobs time ram)
+		unset s
+	#else
+	#	echo '\033[33m[ ! ]\033[0m ZSH powerlevel10k not installed'
+	#fi
+  #fi
+
+
+
+
+
+  
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# Splitting the Zsh settings
+#for file in $ZDOTCONFIGDIR/**/*(.N)
+#do 
+#    source "$file" > /dev/null 2>&1 && echo "config file load: $file"
+#done
+
+
+# zsh funktionen
+#for file in $ZFUNC/**/*(.N)
+#do 
+#    source "$file"  && echo "zfunc file load: $file"
+#done
 
 # all of our zsh files
 #typeset -U config_files
@@ -45,7 +165,7 @@ done
 # Sollte nahe am Anfang von ~/.zshrc bleiben.
 # Initialisierungscode, der möglicherweise eine Konsoleneingabe erfordert (Passwortabfragen, [y/n]
 # Bestätigungen usw.) müssen über diesen Block gehen;  alles andere kann unten stehen.
-
+#[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
@@ -66,25 +186,9 @@ alias -s {gif,GIF,jpeg,JPEG,jpg,JPG,png,PNG}="$IMAGEVIEWER"
 #  fi
 #fi
 
-
-#LOG="/var/log/session/$user_$(date +"%d-%b-%y")"
-#    test "$(ps -ocommand= -p $PPID | awk '{print $1}')" = 'script' || 
-#  for ((i=-0 ; i <= 100 ; i++)); do printf ✀; done >> $LOG
-#        echo -e "PID=$$\n" >> $LOG
-#            (script -fa $LOG)
-#LOG="/var/log/session/$(date +"%H_%M_%S-$USER-%d-%b-%y"_$$)"
-#test "$(ps -ocommand= -p $PPID | awk '{print $1}')" = 'script' || script -f $LOG
-#echo $TTY
-#test "$(ps -aux | grep $PPID | grep -q script) -eq 0)" | echo -e "$CHECK_MARK FUNCNAME" ||  echo -e  "$MARKCROSS FUNCNAME";
 #precmd() { "$(ps -ocommand= -p $PPID | awk '{print $1}')" script -f $LOG }
 
 
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
 
 # Abschluss ohne Berücksichtigung der Groß-/Kleinschreibung l
 zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*'
@@ -105,29 +209,6 @@ zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}
 # Uncomment the following line to enable command auto-correction.
 # ENABLE_CORRECTION="true"
 
-# Uncomment the following line to display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-# COMPLETION_WAITING_DOTS="true"
-
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
 
 # Highlight the current autocomplete option
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
@@ -153,9 +234,11 @@ zstyle ':completion:*:(ssh|scp|rsync):*:hosts-ipaddr' ignored-patterns '^(<->.<-
 #zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' \
 #  '+l:|?=** r:|?=**'
 
+export ZSH_COMPDUMP=$ZSH/cache/.zcompdump-$HOST
 # cache 
 zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/.zcompcache"
+zstyle ':completion:*' accept-exact '*(N)'
+zstyle ':completion:*' cache-path "$ZSH/cache/.zcompdump-$HOST"
 
 # Load compsys
 zmodload zsh/complist
@@ -185,40 +268,13 @@ zstyle ':completion:*:man:*'                        menu yes select
 zstyle ':completion:*' rehash true
 
 # faerbt man-pages ein
-man() {
-env \
-LESS_TERMCAP_mb=$(printf "\e[1;31m") \
-LESS_TERMCAP_md=$(printf "\e[1;31m") \
-LESS_TERMCAP_me=$(printf "\e[0m") \
-LESS_TERMCAP_se=$(printf "\e[0m") \
-LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
-LESS_TERMCAP_ue=$(printf "\e[0m") \
-LESS_TERMCAP_us=$(printf "\e[1;32m") \
-man "$@"
-}
-
-
-
+ 
 
 
 
 # host completion /* add brackets as vim can't parse zsh's complex cmdlines 8-) {{{ */
 [ -r ~/.ssh/known_hosts ] && _ssh_hosts=(${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[\|]*}%%\ *}%%,*}) || _ssh_hosts=()
 [ -r /etc/hosts ] && : ${(A)_etc_hosts:=${(s: :)${(ps:\t:)${${(f)~~"$(</etc/hosts)"}%%\#*}##[:blank:]#[^[:blank:]]#}}} || _etc_hosts=()
-
-hosts=(`hostname` "$_ssh_hosts[@]" "$_etc_hosts[@]" localhost)
-zstyle ':completion:*:hosts'                        hosts $hosts
-
-
-# Zurücksetzen des Terminals mit Escape-Sequenzen # test= print '\e(0\e)B'
-autoload -Uz add-zsh-hook
-
- Funktion reset_broken_terminal () {
-	 printf '%b' '\e[0m\e(B\e)0\017\e[?5l\e7\e[0;0r\e8'
- }
- add-zsh-hook -Uz precmd reset_broken_terminal 
-
-
 
 
 
@@ -249,7 +305,6 @@ plugins=(
   catimg
   copybuffer        # ctrl-o
   rsync
-  zsh-abbr
   mosh
   nmap
   emoji
@@ -272,8 +327,8 @@ plugins=(
   zsh-autosuggestions
   fzf
 )
-source "${ZSH}/oh-my-zsh.sh"
-ZSH_THEME="powerlevel10k/powerlevel10k" 
+source $ZSH/oh-my-zsh.sh
+
 # bindkey
 bindkey "^[[1;5D" beginning-of-line # CTRL + <
 bindkey "^[OH"    beginning-of-line # HOME
@@ -321,47 +376,11 @@ export ATUIN_NOBIND="true"
 eval "$(navi widget zsh)"
 
 
-# fpath 
-#fpath=($ZDOTDIR/completion $fpath)
-#fpath=(~/Coding/shell/snippets $fpath)
-#fpath=(~/Coding/shell/skripte $fpath)
-#autoload -Uz compinit && compinit -i
 
 
-fpath=(
-	$ZFUNC(N-/)
-	$ZCOMPLETION(N-/)
-	$ZDOTCONFIGDIR(N-/)
-	$ZDOTPLUGINSDIR(N-/)
-	#/usr/local/share/zsh/site-functions(N-/)
-	#/usr/share/zsh/site-functions(N-/)
-	$fpath
-)
-export FPATH
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+#[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-#ENABLE_CORRECTION
-#setopt CORRECT
-#setopt CORRECT_ALL 
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-
-# remove alias
-# unalias -m '*'
 unalias cucumber
 unalias gcas
 unalias gcasm
@@ -560,115 +579,3 @@ unalias gwch
 unalias gwip
 unalias gdcw
 unalias gunwip
-
-#################################################################
-#                        .zshenv                                #
-#################################################################
-# What goes in i                                                #
-#   Befehlssuchpfad                                             #
-#   Andere wichtige Umgebungsvariablen                          #
-#   Befehle zum Einrichten von Aliassen und Funktionen, die     #
-#   für andere Skripte benötigt werden                          #
-#################################################################
-# What does NOT go in it                                        # 
-#   Befehle, die eine Ausgabe erzeugen                          #
-#   Alles, was die Shell voraussetzt, wird an ein tty angehängt # 
-#################################################################
-
-###############################
-# EXPORT ENVIRONMENT VARIABLE #
-###############################
-
-# XDG
-#export XDG_CONFIG_HOME="$HOME/.config"     #  Wo benutzerspezifische Konfigurationen geschrieben werden sollen (analog zu /etc
-export XDG_CACHE_HOME="$HOME/.cache"        #  Wo benutzerspezifische nicht wesentliche (gecachte) Daten geschrieben werden sollen (analog zu /var/cache). 
-#export XDG_DATA_HOME="$HOME/.local/share"   #  Wo benutzerspezifische Datendateien geschrieben werden sollen (analog zu /usr/share). 
-#export XDG_STATE_HOME="$HOME/.local/state"  #  Wo benutzerspezifische Zustandsdateien geschrieben werden sollen (analog zu /var/lib). 
-#export XDG_RUNTIME_DIR="/run/user/$UID"     #  Wird für nicht wesentliche, benutzerspezifische Datendateien wie Sockets, Named Pipes usw. verwendet.
-                                            #  Kein Standardwert erforderlich; Warnungen sollten ausgegeben werden, wenn sie nicht gesetzt sind, oder Äquivalente bereitgestellt werden.
-                                            #  Muss dem Benutzer mit einem Zugriffsmodus von gehören 0700.
-                                            #  Dateisystem, das nach den Standards des Betriebssystems vollständig ausgestattet ist.
-                                            #  Muss sich auf dem lokalen Dateisystem befinden.
-                                            #  Kann regelmäßig gereinigt werden.
-                                            #  Alle 6 Stunden geändert oder Sticky Bit gesetzt, wenn Persistenz gewünscht wird.
-                                            #  Kann nur für die Dauer der Anmeldung des Benutzers bestehen.
-                                            #  Sollte keine großen Dateien speichern, da sie möglicherweise als tmpfs gemountet werden.
-                                            #  pam_systemd setzt dies auf /run/user/$UID. 
-# zsh                                        
-export DOTFILES=${HOME}/.dotfiles
-export ZDOTDIR=${HOME}/.zsh
-export ZSH=${HOME}/.oh-my-zsh
-
-
-# .zsh
-export ZDOTCONFIGDIR=${ZDOTDIR}/config
-export ZDOTPLUGINSDIR=${ZDOTDIR}/plugins
-export ZFUNC=${ZDOTDIR}/zfunc
-export ZCOMPLETION=${ZDOTDIR}/completion
-
-
-
-
-# navi
-export NAVI=$HOME/.local/share/navi/cheats/
-
-
-
-
-
-# Default programs
-[ -n "$DISPLAY" ] && export VISUAL="codium"     
-[ -n "$DISPLAY" ] && export MDEDITOR="marktext"        || export BROWSER="nano"
-[ -n "$DISPLAY" ] && export BROWSER="firefox"          || export BROWSER="lynx"
-[ -n "$DISPLAY" ] && export NB_GUI_BROWSER="firefox"   || export BROWSER="lynx"
-[ -n "$DISPLAY" ] && export IMAGEVIEWER="shotwell"     || export BROWSER="shotwell"
-
-#test "$?" -eq 0 echo -e "$CHECK_MARK FUNCNAME" || echo -e  "$MARKCROSS FUNCNAME";
-
-# env 
-export LANG="de_DE.UTF-8"
-export DATUM=$(date "+%Y%m%d") #20220307
-export DATUMUHRZEIT=$(date +%Y%m%d_%H:%M) #20220307_00:25
-#export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
-
-
-# fzf
-export FZF_BASE=/usr/bin/fzf
-
-
-# go
-if [ -d "$HOME/go" ]; then
-  export GOPATH="$HOME/go"
-fi
-if [ ! -z "$GOPATH" ] && [ -d "$GOPATH/bin" ]; then
-  export PATH="$GOPATH/bin:$PATH"
-  export PATH=$PATH:/usr/local/go/bin
-fi
-
-
-# nvm
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-
-# cargo
- source $HOME/.cargo/env
-
-# java
-export JAVA_HOME="/usr/lib/jvm/default-java"
-
-
-# path
-#export PATH="$HOME/.local/bin:$PATH"
-export PATH="/qq/lib/code/shell/snippets:$PATH"
-#export PATH="/qq/dev/build/bash:$PATH"
-
-
-
-export WARN="\r\033[2K  [\033[0;33mWARN\033[0m]"        # [warn]        
-export HEAD="\r  [ \033[01;34m..\033[0m ]"              # [ .. ]
-export ATTENTION="\r\033[2K  [ \033[0;31m!!\033[0m ]"   # [ !! ] 
-export OK="\r\033[2K  [ \033[00;32mOK\033[0m ]"         # [ OK ] 
-export FAIL="\r\033[2K  [\033[0;31mFAIL\033[0m]"        # [FAIL] 
-export QUEST="\r  [ \033[0;33m??\033[0m ]"              # [ ?? ]
