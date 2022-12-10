@@ -13,7 +13,7 @@ After the installation, all the dotfiles will be physically present in your home
 ## Installation
 
 ~~~bash
- sh -c "$(wget -O- https://gitlab.raphael-christopher.de/xmg/zsh-dotfile-bare/-/blob/main/deploy.sh)"
+ sh -c "$(wget -O- https://gitlab.raphael-christopher.de/xmg/zsh-dotfile-bare/-/raw/main/deploy.sh)"
 ~~~
 
 The URL <http://bit.ly/get-my-dotfiles> is simply a shortened link to the [dotfiles-install.sh](https://gist.github.com/weibeld/869f723063811e5088708a9386bf52bf#file-dotfiles-install-sh) file in this Gist, and the above command downloads this file and executes it in a sub-shell.
