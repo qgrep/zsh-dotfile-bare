@@ -1,0 +1,42 @@
+# This is only used for developing the zsh-in-docker script, but can be used as an example.
+
+FROM ubuntu
+
+
+LABEL MAINTAINER="zsh env"
+
+ENV DOCKER_ENV=TRUE
+ENV DATA=/data
+
+ARG USERNAME=ubuntu
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    && apt-get update \
+    && apt-get install -y zsh sudo wget git \
+    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME \
+    #
+    # Clean up
+    && apt-get autoremove -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+
+USER $USERNAME
+RUN touch ~/.zshrc
+RUN sh -c "$(wget -O- https://raw.githubusercontent.com/qgrep/dotfiles/master/deploy.sh)"
+
+USER root
+
+
+chsh -s "$(which zsh)"
+#RUN git clone git@github.com:qgrep/dotfiles.git 
+
+#CMD [ "source /root/.zshrc", "zsh"]
+
+ENTRYPOINT [ "/bin/zsh" ]
+CMD ["-l"]

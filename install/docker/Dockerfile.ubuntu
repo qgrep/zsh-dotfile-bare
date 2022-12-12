@@ -1,0 +1,12 @@
+FROM ubuntu:20.04
+
+RUN apt-get update && apt-get upgrade -y
+
+RUN apt-get install -y zsh curl git
+
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+
+RUN usermod -s $(which zsh) $(whoami)
+
+
+WORKDIR /root

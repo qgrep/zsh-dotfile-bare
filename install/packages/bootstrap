@@ -1,0 +1,155 @@
+#!/bin/env bash
+
+res="\033[0m"
+bold="\033[1m"
+inv="\033[7m"
+bold="\033[1m"
+blink="\033[5m"
+uli="\033[4m"
+red="\033[31m"
+yellow="\033[0;33m"
+green="\033[1;32m"
+blue="\033[1;34m"
+cyan="\033[0;36m"
+white="\033[1;37m"
+black="\033[0;30m"
+grey="\033[0;37m"
+darkgrey="\033[1;30m"
+brightcyan="\033[1;36m"
+brightgreen="\033[1;32m"
+brightred="\033[1;31m"
+brightblue="\033[1;34m"
+CHECK_MARK="\033[32m\u2714\033[0m"             # ✔
+CHECK_MARK2="\033[0;32m🗹\033[0m"               # 🗹
+MARKCROSS="\033[31m\u274c\033[0m"              # ❌
+CHECK="[\e[1;32m✓\e[0m]"                       # [✓]
+CROSS="[\e[1;31m✗\e[0m]"                       # [✗]
+WARN="\r\033[2K  [\033[0;33mWARN\033[0m]"      # [warn]
+HEAD="\r  [ \033[01;34m..\033[0m ]"            # [ .. ]
+ATTENTION="\r\033[2K  [ \033[0;31m!!\033[0m ]" # [ !! ]
+OK="\r\033[2K  [ \033[00;32mOK\033[0m ]"       # [ OK ]
+FAIL="\r\033[2K  [\033[0;31mFAIL\033[0m]"      # [FAIL]
+QUEST="\r  [ \033[0;33m??\033[0m ]"             # [ ?? ]
+
+PACKAGEMANAGER="apt"
+head() {
+  printf "$HEAD $1\n\n"
+}
+
+quest () {
+  printf "$QUEST $1\n"
+}
+
+ok() {
+  printf "$OK $1\n"
+}
+
+err() {
+  printf "$MARKCROSS $1"
+  echo ''
+}
+
+attention() {
+  echo -e "$ATTENTION $1\n"
+  echo ''
+}
+
+
+fail() {
+  printf "$FAIL $1"
+  echo ''
+}
+
+warn() {
+  printf "\r\033[2K  [\033[0;33mWARN\033[0m] $1"
+  echo ''
+}
+
+response() {
+  echo -en "\r  [ \033[0;33m??\033[0m ] ${bold}Install? Eingabe von [y/J] um forzufahren..."
+  read -sn1 response
+  if [[ "$response" =~ ^(j|y|Y|J)$ ]]; then
+    echo -e "\r $OK ${bold}Eingabe von [${green}y${res}/${green}Y${res}] ${bold}um forzufahren..."        # ok
+  else
+    echo -e "\r $FAIL ${bold}Eingabe von [${red}n${res}/${red}N${res}]   ${bold}um forzufahren..."        # fail
+    exit 0
+  fi
+}
+
+install_lostpackage() {
+  head "$bold${FUNCNAME[0]}"
+  for LOST in "${LOSTPACKAGE[@]}"; do
+    source "${LOST[$i]}-install.sh" #> /dev/null 2>&1 &  
+    if [ "$?" = "0" ]; then
+     ok ${LOST[$i]} 
+     else
+       FAILPACKAGE+=($LOST) && fail ${LOST[$i]}
+ fi
+  done
+  echo -e "\n$ATTENTION ${yellow}${FAILPACKAGE[@]}${res} can't installed"
+}
+
+check_lostpackage() {
+  packages=($(find ${DOTINSTALL} -name '*.sh' -type f -printf '%f\n' | sort | sed "s#-install.sh##g "))
+
+  head "$bold${FUNCNAME[0]}"
+  for i in "${packages[@]}"; do
+    if ! [ -x "$(command -v $i)" ]; then
+      warn "$i not installed"
+      LOSTPACKAGE+=($i)
+    else
+      ok "$i installed"
+    fi
+  done
+
+  if [ -x ${LOSTPACKAGE[$i]} ]; then
+  echo 
+  ok "All Package are installed"
+  exit 0
+  else 
+  echo -e "\n$ATTENTION ${yellow}${LOSTPACKAGE[@]}${res} are not installed\n"
+  response
+  install_lostpackage
+  fi
+#  QUEST "Install with ${bold}[$PACKAGEMANAGER]?"
+
+}
+
+
+check_lostpackage
+
+
+DEVICE_IP=("10.10.99.70");USERNAME="u0_a528"
+SSHPORT="-p 8022"
+
+cat <<'EOF'
+
+silver_searcher_from_source() {
+  git clone git://github.com/ggreer/the_silver_searcher.git /tmp/the_silver_searcher
+  sudo aptitude install -y automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev
+  sh /tmp/the_silver_searcher/build.sh
+  cd /tmp/the_silver_searcher
+  sh build.sh
+  sudo make install
+  cd
+  rm -rf /tmp/the_silver_searcher
+}
+
+if ! command -v ag >/dev/null; then
+  fancy_echo "Installing The Silver Searcher (better than ack or grep) to search the contents of files ..."
+
+  if aptitude show silversearcher-ag &>/dev/null; then
+    sudo aptitude install silversearcher-ag
+  else
+    silver_searcher_from_source
+  fi
+fi
+
+
+   case ${REPLY:0:1} in
+        y|Y ) DOTFILES_CRON=1 ;;
+        * ) DOTFILES_CRON=0 ;;
+    esac
+
+
+EOF

@@ -1,0 +1,11 @@
+version: '3.3'
+services:
+    app:
+        container_name: ubuntu
+        restart: always
+        build: .
+    dockerfile: Dockerfile
+
+#build:
+#    context: ./dir
+#    dockerfile: Dockerfile.dev
