@@ -40,13 +40,13 @@ alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 #------------------------------------------------------------------------------#
 echo "> Downloading dotfiles..."
 DOTDIR=.dotfiles
-git clone --quiet --bare https://gitlab.raphael-christopher.de/xmg/zsh-dotfile-bare "$HOME/$DOTDIR"
-cmd() { git --git-dir="$HOME/$DOTDIR" --work-tree="$HOME" "$@"; }
+dot clone --bare --recurse-submodules https://gitlab.raphael-christopher.de/xmg/zsh-dotfile-bare "$HOME/$DOTDIR"
+dot() { git --git-dir="$HOME/$DOTDIR" --work-tree="$HOME" "$@"; }
 
 #------------------------------------------------------------------------------#
 # Backup already existing dotfiles
 #------------------------------------------------------------------------------#
-files=($(cmd ls-tree -r HEAD | awk '{print $NF}'))
+files=($(dot ls-tree -r HEAD | awk '{print $NF}'))
 bkp=.dotfiles.backup
 for f in "${files[@]}"; do
   # File at root ==> back up file
@@ -65,9 +65,9 @@ done
 #------------------------------------------------------------------------------#
 # Install
 #------------------------------------------------------------------------------#
-cmd checkout
-cmd submodule --quiet init
-cmd submodule --quiet update
-cmd config status.showUntrackedFiles no
+dot checkout
+dot submodule --quiet init
+dot submodule --quiet update
+dot config status.showUntrackedFiles no
 echo "> Success! The following dotfiles have been installed to $HOME:"
 printf '    %s\n' "${files[@]}"
