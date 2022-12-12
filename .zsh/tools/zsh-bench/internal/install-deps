@@ -1,0 +1,37 @@
+#!/bin/sh
+
+set -ue
+
+printf '==> setting up the container ...\n'
+
+aptget() {
+  DEBIAN_FRONTEND=noninteractive DEBCONF_NOWARNINGS=yes \
+    command apt-get                                     \
+    -o DPkg::options::="--force-confdef"                \
+    -o DPkg::options::="--force-confold"                \
+    -qq "$@" >/dev/null
+}
+
+aptget update
+aptget upgrade -y
+aptget install -y -- bsdutils curl git make ncurses-bin perl sudo util-linux zsh direnv tzdata "$@"
+[ $# -eq 0 ] || aptget update
+
+(
+  cd /
+  starship="$(curl -fsSL https://starship.rs/install.sh)"
+  tmpdir="$(sudo -u nobody mktemp -d)"
+  sh -c "$starship" sh -y -b "$tmpdir" >/dev/null
+  install -- "$tmpdir"/starship /usr/local/bin/
+  rm -rf -- "$tmpdir"
+)
+
+(
+  dir="$(dirname -- "$0")"
+  "$dir"/install-tmux
+)
+
+git config --system core.untrackedCache true
+git config --system user.name           "Zsh Bench"
+git config --system user.email          "zsh-bench@example.com"
+git config --system init.defaultBranch  "master"

@@ -1,0 +1,351 @@
+==> starting ubuntu:21.04 in docker ...
+==> docker container ID: 2c4563376517
+==> setting up the container ...
+==> setting up user zsh-bench with no-rcs ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=0
+has_compsys=0
+has_syntax_highlighting=0
+has_autosuggestions=0
+has_git_prompt=0
+first_prompt_lag_ms=1.428
+first_command_lag_ms=1.621
+command_lag_ms=0.089
+input_lag_ms=0.164
+exit_time_ms=1.655
+==> setting up user zsh-bench with tmux ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=1
+has_compsys=0
+has_syntax_highlighting=0
+has_autosuggestions=0
+has_git_prompt=0
+first_prompt_lag_ms=4.484
+first_command_lag_ms=4.657
+command_lag_ms=0.087
+input_lag_ms=0.159
+exit_time_ms=1.950
+==> setting up user zsh-bench with compsys ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=0
+has_compsys=1
+has_syntax_highlighting=0
+has_autosuggestions=0
+has_git_prompt=0
+first_prompt_lag_ms=22.691
+first_command_lag_ms=22.847
+command_lag_ms=0.089
+input_lag_ms=0.188
+exit_time_ms=23.515
+==> setting up user zsh-bench with zsh-syntax-highlighting ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=0
+has_compsys=0
+has_syntax_highlighting=1
+has_autosuggestions=0
+has_git_prompt=0
+first_prompt_lag_ms=12.714
+first_command_lag_ms=23.851
+command_lag_ms=0.599
+input_lag_ms=12.661
+exit_time_ms=13.311
+==> setting up user zsh-bench with zsh-autosuggestions ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=0
+has_compsys=0
+has_syntax_highlighting=0
+has_autosuggestions=1
+has_git_prompt=0
+first_prompt_lag_ms=17.994
+first_command_lag_ms=21.745
+command_lag_ms=10.689
+input_lag_ms=0.838
+exit_time_ms=4.281
+==> setting up user zsh-bench with git-branch ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=0
+has_compsys=0
+has_syntax_highlighting=0
+has_autosuggestions=0
+has_git_prompt=1
+first_prompt_lag_ms=17.669
+first_command_lag_ms=17.941
+command_lag_ms=5.710
+input_lag_ms=0.181
+exit_time_ms=1.422
+==> setting up user zsh-bench with agnoster ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=0
+has_compsys=0
+has_syntax_highlighting=0
+has_autosuggestions=0
+has_git_prompt=1
+first_prompt_lag_ms=36.199
+first_command_lag_ms=36.513
+command_lag_ms=26.238
+input_lag_ms=0.165
+exit_time_ms=2.676
+==> setting up user zsh-bench with starship ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=0
+has_compsys=0
+has_syntax_highlighting=0
+has_autosuggestions=0
+has_git_prompt=1
+first_prompt_lag_ms=43.216
+first_command_lag_ms=43.584
+command_lag_ms=37.609
+input_lag_ms=0.157
+exit_time_ms=6.256
+==> setting up user zsh-bench with powerlevel10k ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=0
+has_compsys=0
+has_syntax_highlighting=0
+has_autosuggestions=0
+has_git_prompt=1
+first_prompt_lag_ms=2.046
+first_command_lag_ms=23.074
+command_lag_ms=2.039
+input_lag_ms=0.166
+exit_time_ms=7.871
+==> setting up user zsh-bench with powerlevel10k-full ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=0
+has_compsys=0
+has_syntax_highlighting=0
+has_autosuggestions=0
+has_git_prompt=1
+first_prompt_lag_ms=3.984
+first_command_lag_ms=46.279
+command_lag_ms=7.050
+input_lag_ms=1.552
+exit_time_ms=12.532
+==> setting up user zsh-bench with prezto ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=0
+has_compsys=1
+has_syntax_highlighting=0
+has_autosuggestions=0
+has_git_prompt=0
+first_prompt_lag_ms=58.172
+first_command_lag_ms=62.317
+command_lag_ms=1.532
+input_lag_ms=0.408
+exit_time_ms=56.458
+==> setting up user zsh-bench with ohmyzsh ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=0
+has_compsys=1
+has_syntax_highlighting=0
+has_autosuggestions=0
+has_git_prompt=1
+first_prompt_lag_ms=110.813
+first_command_lag_ms=113.662
+command_lag_ms=38.560
+input_lag_ms=0.439
+exit_time_ms=73.685
+==> setting up user zsh-bench with zim ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=0
+has_compsys=1
+has_syntax_highlighting=1
+has_autosuggestions=1
+has_git_prompt=1
+first_prompt_lag_ms=63.433
+first_command_lag_ms=82.531
+command_lag_ms=20.054
+input_lag_ms=14.427
+exit_time_ms=30.861
+==> setting up user zsh-bench with zsh4humans ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=1
+has_compsys=1
+has_syntax_highlighting=1
+has_autosuggestions=1
+has_git_prompt=1
+first_prompt_lag_ms=10.129
+first_command_lag_ms=58.514
+command_lag_ms=3.020
+input_lag_ms=5.455
+exit_time_ms=7.129
+==> setting up user zsh-bench with diy ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=1
+has_compsys=1
+has_syntax_highlighting=1
+has_autosuggestions=1
+has_git_prompt=1
+first_prompt_lag_ms=67.469
+first_command_lag_ms=79.842
+command_lag_ms=17.029
+input_lag_ms=13.510
+exit_time_ms=37.127
+==> setting up user zsh-bench with diy+ ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=1
+has_compsys=1
+has_syntax_highlighting=1
+has_autosuggestions=1
+has_git_prompt=1
+first_prompt_lag_ms=5.086
+first_command_lag_ms=85.933
+command_lag_ms=2.640
+input_lag_ms=14.238
+exit_time_ms=40.091
+==> setting up user zsh-bench with diy++ ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=1
+has_compsys=1
+has_syntax_highlighting=1
+has_autosuggestions=1
+has_git_prompt=1
+first_prompt_lag_ms=4.951
+first_command_lag_ms=67.269
+command_lag_ms=2.498
+input_lag_ms=13.249
+exit_time_ms=24.525
+==> setting up user zsh-bench with diy++unsafe ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=1
+has_compsys=1
+has_syntax_highlighting=1
+has_autosuggestions=1
+has_git_prompt=1
+first_prompt_lag_ms=4.769
+first_command_lag_ms=56.886
+command_lag_ms=2.482
+input_lag_ms=13.152
+exit_time_ms=14.778
+==> setting up user zsh-bench with diy++fsyh ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=1
+has_compsys=1
+has_syntax_highlighting=1
+has_autosuggestions=1
+has_git_prompt=1
+first_prompt_lag_ms=4.889
+first_command_lag_ms=62.264
+command_lag_ms=2.152
+input_lag_ms=4.781
+exit_time_ms=25.214
+==> setting up user zsh-bench with zcomet ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=1
+has_compsys=1
+has_syntax_highlighting=1
+has_autosuggestions=1
+has_git_prompt=1
+first_prompt_lag_ms=5.064
+first_command_lag_ms=74.245
+command_lag_ms=2.661
+input_lag_ms=14.298
+exit_time_ms=29.430
+==> setting up user zsh-bench with zinit ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=1
+has_compsys=1
+has_syntax_highlighting=1
+has_autosuggestions=1
+has_git_prompt=1
+first_prompt_lag_ms=5.095
+first_command_lag_ms=129.513
+command_lag_ms=2.657
+input_lag_ms=14.462
+exit_time_ms=80.383
+==> setting up user zsh-bench with zplug ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=1
+has_compsys=1
+has_syntax_highlighting=1
+has_autosuggestions=1
+has_git_prompt=1
+first_prompt_lag_ms=59.594
+first_command_lag_ms=171.573
+command_lag_ms=2.687
+input_lag_ms=14.494
+exit_time_ms=122.150
+==> setting up user zsh-bench with ohmyzsh+ ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=1
+has_compsys=1
+has_syntax_highlighting=1
+has_autosuggestions=1
+has_git_prompt=1
+first_prompt_lag_ms=5.078
+first_command_lag_ms=98.122
+command_lag_ms=3.166
+input_lag_ms=14.468
+exit_time_ms=49.504
+==> setting up user zsh-bench with prezto+ ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=1
+has_compsys=1
+has_syntax_highlighting=1
+has_autosuggestions=1
+has_git_prompt=1
+first_prompt_lag_ms=5.131
+first_command_lag_ms=79.753
+command_lag_ms=3.870
+input_lag_ms=15.982
+exit_time_ms=29.317
+==> setting up user zsh-bench with zim+ ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=1
+has_compsys=1
+has_syntax_highlighting=1
+has_autosuggestions=1
+has_git_prompt=1
+first_prompt_lag_ms=5.343
+first_command_lag_ms=61.687
+command_lag_ms=2.662
+input_lag_ms=14.299
+exit_time_ms=16.712
+==> setting up user zsh-bench with antidote ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=1
+has_compsys=1
+has_syntax_highlighting=1
+has_autosuggestions=1
+has_git_prompt=1
+first_prompt_lag_ms=4.996
+first_command_lag_ms=75.190
+command_lag_ms=2.540
+input_lag_ms=13.308
+exit_time_ms=31.959
+==> setting up user zsh-bench with zinit-turbo ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=1
+has_compsys=1
+has_syntax_highlighting=0
+has_autosuggestions=0
+has_git_prompt=1
+first_prompt_lag_ms=4.881
+first_command_lag_ms=61.019
+command_lag_ms=2.517
+input_lag_ms=12.645
+exit_time_ms=41.131
+==> setting up user zsh-bench with zsh-defer ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=1
+has_compsys=1
+has_syntax_highlighting=0
+has_autosuggestions=0
+has_git_prompt=1
+first_prompt_lag_ms=4.892
+first_command_lag_ms=36.719
+command_lag_ms=2.942
+input_lag_ms=13.604
+exit_time_ms=19.429
+==> setting up user zsh-bench with synthetic ...
+==> benchmarking login shell of user zsh-bench ...
+creates_tty=0
+has_compsys=0
+has_syntax_highlighting=0
+has_autosuggestions=0
+has_git_prompt=0
+first_prompt_lag_ms=1.339
+first_command_lag_ms=2.199
+command_lag_ms=0.147
+input_lag_ms=0.184
+exit_time_ms=1.712
