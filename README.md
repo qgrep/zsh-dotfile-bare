@@ -1,9 +1,11 @@
 # Dotfiles
 
 Instructions for the dotfile repository on <https://github.com/weibeld/dotfiles>.
-~~~bash
+
+```bash
 git push -uf origin main
-~~~
+```
+
 ## Introduction
 
 The dotfiles in this repository are installed using a **bare Git repository**. This method does not use symlinks (like most other dotfile repositories).
@@ -12,9 +14,9 @@ After the installation, all the dotfiles will be physically present in your home
 
 ## Installation
 
-~~~bash
+```bash
  sh -c "$(wget -O- https://gitlab.raphael-christopher.de/xmg/zsh-dotfile-bare/-/raw/main/deploy.sh)"
-~~~
+```
 
 The URL <http://bit.ly/get-my-dotfiles> is simply a shortened link to the [dotfiles-install.sh](https://gist.github.com/weibeld/869f723063811e5088708a9386bf52bf#file-dotfiles-install-sh) file in this Gist, and the above command downloads this file and executes it in a sub-shell.
 
@@ -32,9 +34,9 @@ Now all the dotfiles from the repository are installed in your home directory. H
 
 To interact with the bare Git repository, you need the following alias:
 
-~~~bash
+```bash
 alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
-~~~
+```
 
 Note: the [`.bashrc`](https://github.com/weibeld/dotfiles/blob/master/.bashrc) file in the dotfile repository already contains this alias definition, so you're fine to go.
 
@@ -42,23 +44,23 @@ With the `dotfiles` alias, you can now manage the dotfiles via the bare Git repo
 
 Edited your dotfiles? No problem, commit and push the changes:
 
-~~~bash
+```bash
 dotfiles add ~/.vimrc
 dotfiles commit -m "Edit .vimrc"
 dotfiles push
-~~~
+```
 
 Pushed changes to the remote repository from another machine? Easy, just pull down the new version:
 
-~~~bash
+```bash
 dotfiles pull
-~~~
+```
 
 Want to know what's going on? Sure:
 
-~~~bash
+```bash
 dotfiles status
-~~~
+```
 
 ## Submodules
 
@@ -69,39 +71,40 @@ The case for submodules occurs typically with Vim plugins, if you install them w
 Here are some common tasks when using submodules:
 
 - Add a Vim plugin as a submodule to the repository:
-
-    ~~~bash
+  
+  ```bash
     dotfiles submodule add https://github.com/tpope/vim-surround .vim/bundle/vim-surround
     dotfiles commit
     dotfiles push
     # Download files of submodule on local machine
     dotfiles submodule init
-    ~~~
+  ```
 
 - Pull changes that inlude a newly added submodule on another machine:
-
-    ~~~bash
+  
+  ```bash
     dotfiles pull
     dotfiles submodule init
     dotfiles submodule update
-    ~~~
-    
-- List all submodules in the repository (including the commit that is used for each submodule):
+  ```
 
-    ~~~bash
+- List all submodules in the repository (including the commit that is used for each submodule):
+  
+  ```bash
     dotfiles submodule status
-    ~~~
+  ```
 
 - Update the submodules in the repository to the newest commits:
-
-    ~~~bash
+  
+  ```bash
     dotfiles submodule update --remote
     dotfiles add <changed_files>
     dotfiles commit
-    ~~~
+  ```
 
 ## References
 
 The used installation method using a bare Git repository is described here:
+
 - <https://gist.github.com/weibeld/869f723063811e5088708a9386bf52bf#file-readme-md/>
 - <https://developer.atlassian.com/blog/2016/02/best-way-to-store-dotfiles-git-bare-repo/>
