@@ -27,9 +27,9 @@ previous-session=Ctrl+Down
 previous-terminal=Ctrl+Left
 split-left-right=Ctrl+>
 split-top-bottom=Ctrl+_
-toggle-window-state=none
+toggle-window-state=Ctrl+Space
 
 [Window]
-Height=83
+Height=93
 Position=100
 Width=70
