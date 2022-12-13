@@ -104,3 +104,4 @@ export QUEST="\r  [ \033[0;33m??\033[0m ]"              # [ ?? ]
 
 # git
 alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
+
