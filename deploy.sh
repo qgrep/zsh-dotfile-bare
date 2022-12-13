@@ -31,9 +31,7 @@ git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-m
 }
 
 
-
-set -e
-alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
+alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME $@'
 
 #------------------------------------------------------------------------------#
 # Download
@@ -41,7 +39,8 @@ alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 echo "> Downloading dotfiles..."
 DOTDIR=.dotfiles
 dot clone --bare --recurse-submodules https://gitlab.raphael-christopher.de/xmg/zsh-dotfile-bare "$HOME/$DOTDIR"
-dot() { git --git-dir="$HOME/$DOTDIR" --work-tree="$HOME" "$@"; }
+
+#wget -O /tmp/deploy.sh --no-check-certificate --content-disposition   https://raw.githubusercontent.com/qgrep/zsh-dotfile-bare/main/deploy.sh && chmod +x /tmp/deploy.sh && source /tmp/deploy.shdot() { git --git-dir="$HOME/$DOTDIR" --work-tree="$HOME" "$@"; }
 
 #------------------------------------------------------------------------------#
 # Backup already existing dotfiles
