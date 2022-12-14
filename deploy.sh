@@ -26,7 +26,7 @@ ZSHPACKAGES=("https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-m
 
 
 
-clone_repo_and_backup () {}
+clone_repo_and_backup () {
 alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME $@'
 #dot clone --bare --recurse-submodules https://github.com/qgrep/zsh-dotfile-bare.git "$HOME/.dotfiles"
 #------------------------------------------------------------------------------#
