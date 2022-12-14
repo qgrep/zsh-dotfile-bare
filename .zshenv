@@ -50,7 +50,8 @@ export ZCOMPLETION=${ZDOTDIR}/completion
 [ -n "$DISPLAY" ] && export BROWSER="firefox"          || export BROWSER="lynx"
 [ -n "$DISPLAY" ] && export NB_GUI_BROWSER="firefox"   || export BROWSER="lynx"
 [ -n "$DISPLAY" ] && export IMAGEVIEWER="shotwell"     || export BROWSER="shotwell"
-
+# Set preferred editor for specific files: 
+alias -s {cs,ts,html,json,xml,md}=code
 
 # go
 if [ -d "$HOME/go" ]; then
@@ -100,8 +101,4 @@ export ATTENTION="\r\033[2K  [ \033[0;31m!!\033[0m ]"   # [ !! ]
 export OK="\r\033[2K  [ \033[00;32mOK\033[0m ]"         # [ OK ] 
 export FAIL="\r\033[2K  [\033[0;31mFAIL\033[0m]"        # [FAIL] 
 export QUEST="\r  [ \033[0;33m??\033[0m ]"              # [ ?? ]
-
-
-# git
-alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 

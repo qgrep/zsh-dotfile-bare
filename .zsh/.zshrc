@@ -12,11 +12,11 @@
 export ZSH=${HOME}/.oh-my-zsh
 export ZDOTDIR=${HOME}/.zsh
 
-# .zsh
+# ~~~ ~/.zsh ~~~
 export ZDOTCONFIGDIR=${ZDOTDIR}/config
 export ZDOTPLUGINSDIR=${ZDOTDIR}/plugins
 export ZFUNC=${ZDOTDIR}/zfunc
-export COMPLETION=${ZDOTDIR}/completion
+export ZCOMPLETION=${ZDOTDIR}/completion
 
 for file in $ZDOTCONFIGDIR/**/*(.N)
 do 
@@ -32,103 +32,26 @@ done
 
 # all of our zsh files
 typeset -U config_files
-#config_files=($ZSH/**/*.zsh)
-
-# load the path files
-for file in ${(M)config_files:#*/path.zsh}
-do
-     source "$file"  && echo "zfunc file load: $file"
-done
-
-  #fpath=($ZCOMPLETION$fpath)
+config_files=($ZSH/**/*.zsh)
 
 
-#for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
-#do
-#  source $file
-#done
+
+if type brew &>/dev/null
+    then
+      FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+    
+      autoload -Uz compinit
+      compinit
+    fi
+
 
 # oh-my-posh theme
 #if [[  -f ~/.poshthemes/kushal.omp.json ]]; then 
 # eval "$(oh-my-posh --init --shell zsh --config ~/.poshthemes/kushal.omp.json)" 
 #fi
 export ZSH_THEME="powerlevel10k/powerlevel10k"
-#if ! [[ $(tty) = /dev/tty* ]]
-#then
-	#if source /home/xmg/.zsh/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel10k.zsh-theme 2> /dev/null
-	#then
-		s=' ' # fix too wide icons
-    POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true
-		POWERLEVEL9K_MODE=nerdfont-complete
-		POWERLEVEL9K_SHORTEN_STRATEGY=truncate_beginning
-		POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
-		POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-		POWERLEVEL9K_RPROMPT_ON_NEWLINE=true
-		POWERLEVEL9K_SHORTEN_DIR_LENGTH=2
-		POWERLEVEL9K_OS_ICON_CONTENT_EXPANSION='${P9K_CONTENT} $(whoami | grep -v "^root\$")'
-		POWERLEVEL9K_OS_ICON_BACKGROUND=red
-		POWERLEVEL9K_OS_ICON_FOREGROUND=white
-		POWERLEVEL9K_ROOT_INDICATOR_BACKGROUND=black
-		POWERLEVEL9K_ROOT_INDICATOR_FOREGROUND=red
-		POWERLEVEL9K_SSH_BACKGROUND=white
-		POWERLEVEL9K_SSH_FOREGROUND=blue
-		POWERLEVEL9K_FOLDER_ICON=
-		POWERLEVEL9K_DIR_BACKGROUND=blue
-		POWERLEVEL9K_DIR_FOREGROUND=black
-		POWERLEVEL9K_DIR_WRITABLE_BACKGROUND=black
-		POWERLEVEL9K_DIR_WRITABLE_FOREGROUND=red
-		POWERLEVEL9K_VCS_CLEAN_FOREGROUND=black
-		POWERLEVEL9K_VCS_CLEAN_BACKGROUND=green
-		POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND=black
-		POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND=yellow
-		POWERLEVEL9K_VCS_MODIFIED_FOREGROUND=white
-		POWERLEVEL9K_VCS_MODIFIED_BACKGROUND=black
-		POWERLEVEL9K_VCS_UNTRACKED_ICON=●
-		POWERLEVEL9K_VCS_UNSTAGED_ICON=±
-		POWERLEVEL9K_VCS_INCOMING_CHANGES_ICON=↓
-		POWERLEVEL9K_VCS_OUTGOING_CHANGES_ICON=↑
-		POWERLEVEL9K_VCS_COMMIT_ICON=$s
-		POWERLEVEL9K_STATUS_VERBOSE=false
-		POWERLEVEL9K_STATUS_VERBOSE=false
-		POWERLEVEL9K_STATUS_OK_IN_NON_VERBOSE=true
-		POWERLEVEL9K_EXECUTION_TIME_ICON=$s
-		POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=0
-		POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND=black
-		POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND=blue
-		POWERLEVEL9K_COMMAND_BACKGROUND_JOBS_BACKGROUND=black
-		POWERLEVEL9K_COMMAND_BACKGROUND_JOBS_FOREGROUND=cyan
-		POWERLEVEL9K_TIME_ICON=
-		POWERLEVEL9K_TIME_FORMAT='%D{%I:%M}'
-		POWERLEVEL9K_TIME_BACKGROUND=black
-		POWERLEVEL9K_TIME_FOREGROUND=white
-		POWERLEVEL9K_RAM_ICON=
-		POWERLEVEL9K_RAM_FOREGROUND=black
-		POWERLEVEL9K_RAM_BACKGROUND=yellow
-		POWERLEVEL9K_VI_MODE_FOREGROUND=black
-		POWERLEVEL9K_VI_COMMAND_MODE_STRING=NORMAL
-		POWERLEVEL9K_VI_MODE_NORMAL_BACKGROUND=green
-		POWERLEVEL9K_VI_VISUAL_MODE_STRING=VISUAL
-		POWERLEVEL9K_VI_MODE_VISUAL_BACKGROUND=blue
-		POWERLEVEL9K_VI_OVERWRITE_MODE_STRING=OVERTYPE
-		POWERLEVEL9K_VI_MODE_OVERWRITE_BACKGROUND=red
-		POWERLEVEL9K_VI_INSERT_MODE_STRING=
-		POWERLEVEL9K_LEFT_PROMPT_FIRST_SEGMENT_START_SYMBOL='\uE0B2'
-		POWERLEVEL9K_RIGHT_PROMPT_LAST_SEGMENT_END_SYMBOL='\uE0B0'
-		POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX='%F{blue}╭─'
-		POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX='%F{blue}╰%f '
-		POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon root_indicator ssh dir dir_writable vcs)
-		POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(vi_mode status command_execution_time background_jobs time ram)
-		unset s
-	#else
-	#	echo '\033[33m[ ! ]\033[0m ZSH powerlevel10k not installed'
-	#fi
-  #fi
 
 
-
-
-
-  
 # export NVM_DIR="$HOME/.nvm"
 # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
@@ -171,10 +94,12 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 #typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
 
+
 # standart öffnen mit
 alias -s {index}="$BROWSER"
 alias -s {txt,md}="$MDEDITOR"
 alias -s {gif,GIF,jpeg,JPEG,jpg,JPG,png,PNG}="$IMAGEVIEWER"
+
 
 # VSCode
 #if [[ $TERM_PROGRAM == "vscode" ]]; then
@@ -186,8 +111,8 @@ alias -s {gif,GIF,jpeg,JPEG,jpg,JPG,png,PNG}="$IMAGEVIEWER"
 #  fi
 #fi
 
-#precmd() { "$(ps -ocommand= -p $PPID | awk '{print $1}')" script -f $LOG }
 
+#precmd() { "$(ps -ocommand= -p $PPID | awk '{print $1}')" script -f $LOG }
 
 
 # Abschluss ohne Berücksichtigung der Groß-/Kleinschreibung l
@@ -209,6 +134,9 @@ zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}
 # Uncomment the following line to enable command auto-correction.
 # ENABLE_CORRECTION="true"
 
+# Autocomplete
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#073642,bg=#839496,bold,underline"
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 # Highlight the current autocomplete option
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
@@ -231,19 +159,22 @@ zstyle ':completion:*:(ssh|scp|rsync):*:hosts-ipaddr' ignored-patterns '^(<->.<-
   zstyle ':fzf-tab:*' switch-group ',' '.'
 
 # Allow for autocomplete to be case insensitive
-#zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' \
-#  '+l:|?=** r:|?=**'
+zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' \
+  '+l:|?=** r:|?=**'
 
-export ZSH_COMPDUMP=$ZSH/cache/.zcompdump-$HOST
+
+#export ZSH_COMPDUMP=$ZSH/cache/.zcompdump-$HOST
 # cache 
-zstyle ':completion:*' use-cache on
-zstyle ':completion:*' accept-exact '*(N)'
-zstyle ':completion:*' cache-path "$ZSH/cache/.zcompdump-$HOST"
+#zstyle ':completion:*' use-cache on
+#zstyle ':completion:*' accept-exact '*(N)'
+#zstyle ':completion:*' cache-path "$ZSH/cache/.zcompdump-$HOST"
 
-# Load compsys
+
+# Load compsys and one of its fancy modules
 zmodload zsh/complist
 autoload -Uz compinit
 compinit
+
 # And set some styles...
 zstyle ':completion:*' completer _complete _approximate
 zstyle ':completion:*:descriptions' format "- %d -"
@@ -268,8 +199,17 @@ zstyle ':completion:*:man:*'                        menu yes select
 zstyle ':completion:*' rehash true
 
 # faerbt man-pages ein
- 
-
+man() {
+env \
+LESS_TERMCAP_mb=$(printf "\e[1;31m") \
+LESS_TERMCAP_md=$(printf "\e[1;31m") \
+LESS_TERMCAP_me=$(printf "\e[0m") \
+LESS_TERMCAP_se=$(printf "\e[0m") \
+LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
+LESS_TERMCAP_ue=$(printf "\e[0m") \
+LESS_TERMCAP_us=$(printf "\e[1;32m") \
+man "$@"
+}
 
 
 # host completion /* add brackets as vim can't parse zsh's complex cmdlines 8-) {{{ */
@@ -277,10 +217,9 @@ zstyle ':completion:*' rehash true
 [ -r /etc/hosts ] && : ${(A)_etc_hosts:=${(s: :)${(ps:\t:)${${(f)~~"$(</etc/hosts)"}%%\#*}##[:blank:]#[^[:blank:]]#}}} || _etc_hosts=()
 
 
-
-
 # Initialize the autocompletion
 autoload -Uz compinit && compinit -i	
+
 
 plugins=(
   adb
@@ -329,35 +268,34 @@ plugins=(
 )
 source $ZSH/oh-my-zsh.sh
 
+
 # bindkey
-bindkey "^[[1;5D" beginning-of-line # CTRL + <
-bindkey "^[OH"    beginning-of-line # HOME
-bindkey "^[[1;5C" end-of-line       # CTRL + >
-bindkey "^[OF"    end-of-line       # END
-bindkey "^[[1;3D" backward-word     # ALT  + <
-bindkey "^[[1;3C" forward-word      # ALT  + >
-bindkey "^[[3~"   delete-char       # DELETE
+bindkey "^[[1;5D" beginning-of-line       # CTRL + <
+bindkey "^[OH"    beginning-of-line       # HOME
+bindkey "^[[1;5C" end-of-line             # CTRL + >
+bindkey "^[OF"    end-of-line             # END
+bindkey "^[[1;3D" backward-word           # ALT  + <
+bindkey "^[[1;3C" forward-word            # ALT  + >
+bindkey "^[[3~"   delete-char             # DELETE
 bindkey "^[[A"    history-search-backward # up   arrow
 bindkey "^[[B"    history-search-forward  # down arrow
 bindkey "^[[2~"   overwrite-mode          # Insert
 
-bindkey '^[h'     backward-word        # Alt + h
-bindkey '^[l'     forward-word         # Alt + l
-bindkey '^[j'     backward-char        # Alt + j
-bindkey '^[k'     forward-char         # Alt + k
+bindkey '^[h'     backward-word           # Alt + h
+bindkey '^[l'     forward-word            # Alt + l
+bindkey '^[j'     backward-char           # Alt + j
+bindkey '^[k'     forward-char            # Alt + k
  
+bindkey '^[y'     backward-delete-word    # Alt + y
+bindkey '^[o'     delete-word             # Alt + o
+bindkey '^[u'     backward-delete-char    # Alt + u
+bindkey '^[i'     delete-char             # Alt + i
 
-
-bindkey '^[y'     backward-delete-word # Alt + y
-bindkey '^[o'     delete-word  # Alt + o
-bindkey '^[u'     backward-delete-char # Alt + u
-bindkey '^[i'     delete-char  # Alt + i
-
-bindkey '^[^H'    backward-delete-word # Ctrl + h
-bindkey '^[^L'    delete-word          # Ctrl + l
-bindkey '^[y'     redo                 # Alt + y
-bindkey '^[z'     undo                 # Alt + z
-#bindkey '^L'      clear-screen         # Ctrl + l
+bindkey '^[^H'    backward-delete-word    # Ctrl + h
+bindkey '^[^L'    delete-word             # Ctrl + l
+bindkey '^[y'     redo                    # Alt + y
+bindkey '^[z'     undo                    # Alt + z
+bindkey '^L'      clear-screen            # Ctrl + l
 
 # showkey -a  
 bindkey '^[[1~' beginning-of-line
@@ -376,10 +314,9 @@ export ATUIN_NOBIND="true"
 eval "$(navi widget zsh)"
 
 
-
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 #[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
 
 unalias cucumber
 unalias gcas
