@@ -31,7 +31,7 @@ git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-${ZSH:-~/.o
 }
 
 
-alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME $@'
+#alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME $@'
 
 #------------------------------------------------------------------------------#
 # Download
@@ -39,7 +39,7 @@ alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME $@'
 echo "> Downloading dotfiles..."
 
 
-dot clone --bare --recurse-submodules https://github.com/qgrep/zsh-dotfile-bare.git "$HOME/.dotfiles"
+#dot clone --bare --recurse-submodules https://github.com/qgrep/zsh-dotfile-bare.git "$HOME/.dotfiles"
 
 #wget -O /tmp/deploy.sh --no-check-certificate --content-disposition   https://raw.githubusercontent.com/qgrep/zsh-dotfile-bare/main/deploy.sh && chmod +x /tmp/deploy.sh && source /tmp/deploy.shdot() { git --git-dir="$HOME/$ddasdas" --work-tree="$HOME" "$@"; }
 
@@ -79,7 +79,7 @@ function config {
 mkdir -p .config-backup
 config checkout
 if [ $? = 0 ]; then
-  echo "Checked out config.";
+  echo "Checked out config."; 
   else
     echo "Backing up pre-existing dot files.";
     config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .config-backup/{}
