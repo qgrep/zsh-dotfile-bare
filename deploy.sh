@@ -31,58 +31,47 @@ git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-${ZSH:-~/.o
 }
 
 
-#alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME $@'
 
+
+
+
+#alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME $@'
+#dot clone --bare --recurse-submodules https://github.com/qgrep/zsh-dotfile-bare.git "$HOME/.dotfiles"
 #------------------------------------------------------------------------------#
 # Download
 #------------------------------------------------------------------------------#
 echo "> Downloading dotfiles..."
-
-
-#dot clone --bare --recurse-submodules https://github.com/qgrep/zsh-dotfile-bare.git "$HOME/.dotfiles"
-
-#wget -O /tmp/deploy.sh --no-check-certificate --content-disposition   https://raw.githubusercontent.com/qgrep/zsh-dotfile-bare/main/deploy.sh && chmod +x /tmp/deploy.sh && source /tmp/deploy.shdot() { git --git-dir="$HOME/$ddasdas" --work-tree="$HOME" "$@"; }
+DOTDIR="$HOME/.dotfiles"
+git clone --quiet --bare https://github.com/qgrep/zsh-dotfile-bare "$DOTDIR"
+cmd() { git --git-dir="$DOTDIR" --work-tree="$HOME" "$@"; }
 
 #------------------------------------------------------------------------------#
 # Backup already existing dotfiles
 #------------------------------------------------------------------------------#
-#files=($(dot ls-tree -r HEAD | awk '{print $NF}'))
-#bkp=.dotfiles.backup
-#for f in "${files[@]}"; do
-#  # File at root ==> back up file
-#  if [[ $(basename "$f") = "$f" ]]; then
-#    [[ -f "$HOME/$f" ]] && mkdir -p "$HOME/$bkp" && mv "$HOME/$f" "$HOME/$bkp" && echo "> Backing up: $f ==> $bkp/$f"
+DOTGITFILES=($(cmd ls-tree -r HEAD | awk '{print $NF}'))
+BACKUPDIR=.dotfiles.backup
+for f in "${DOTGITFILES[@]}"; do
+  # File at root ==> back up file
+  if [[ $(basename "$f") = "$f" ]]; then
+    [[ -f "$HOME/$f" ]] && mkdir -p "$HOME/$BACKUPDIR" && mv "$HOME/$f" "$HOME/$BACKUPDIR" && echo "> Backing up: $f ==> $BACKUPDIR/$f"
   # File in nested directory ==> back up outermost directory
-#  else
-#    d=${f%%/*}
-#    if [[ -d "$HOME/$d" ]]; then
-#      [[ -d "$HOME/$bkp/$d" ]] && rm -rf "$HOME/$bkp/$d"
-#      mkdir -p "$HOME/$bkp" && mv "$HOME/$d" "$HOME/$bkp" && echo "> Backing up: $d/ ==> $bkp/$d/"
-#    fi
-#  fi
-#done
+  else
+    d=${f%%/*}
+    echo "d = $d"
+    echo "------------------------------------" 
+    if [[ -d "$HOME/$d" ]]; then
+      [[ -d "$HOME/$BACKUPDIR/$d" ]] && rm -rf "$HOME/$BACKUPDIR/$d"
+      mkdir -p "$HOME/$BACKUPDIR" && mv "$HOME/$d" "$HOME/$BACKUPDIR" && echo "> Backing up: $d/ ==> $BACKUPDIR/$d/"
+    fi
+  fi
+done
 
 #------------------------------------------------------------------------------#
 # Install
 #------------------------------------------------------------------------------#
-#dot checkout
-#dot submodule init
-#dot submodule update
-#dot config status.showUntrackedFiles no
-#echo "> Success! The following dotfiles have been installed to $HOME:"
-#printf '    %s\n' "${files[@]}"
-
-git clone --bare https://github.com/qgrep/zsh-dotfile-bare.git $HOME/.dotfiles
-function config {
-   /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
-}
-mkdir -p .config-backup
-config checkout
-if [ $? = 0 ]; then
-  echo "Checked out config."; 
-  else
-    echo "Backing up pre-existing dot files.";
-    config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .config-backup/{}
-fi;
-config checkout
-config config status.showUntrackedFiles no
+cmd checkout
+cmd submodule --quiet init
+cmd submodule --quiet update
+cmd config status.showUntrackedFiles no
+echo "> Success! The following dotfiles have been installed to $HOME:"
+printf '    %s\n' "${files[@]}"
