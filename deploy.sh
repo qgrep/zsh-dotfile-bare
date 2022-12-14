@@ -32,7 +32,7 @@ git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-${ZSH:-~/.o
 
 
 
-curl -L git.io/antigen > antigen.zsh
+curl -L git.io/antigen > $HOME/antigen.zsh
 source $HOME/.antigen.zsh
 # Load the oh-my-zsh's library.
 antigen use oh-my-zsh
