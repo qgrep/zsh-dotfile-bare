@@ -33,6 +33,7 @@ git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-${ZSH:-~/.o
 
 
 
+antigen bundle $HOME/.oh-my-zsh/custom
 
 
 #alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME $@'
