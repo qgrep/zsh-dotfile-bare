@@ -15,18 +15,15 @@ ok() { printf "$OK $1\n"; }
 fail() { printf "$FAIL $1\n"; }
 
 install () { 
+  if [ -d "$HOME/.oh-my-zsh" ]; then
+    ok
+else
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
   ZSHPACKAGES=("https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k \
               https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting \
               https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions \
               https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions")
-   for p in "${ZSHPACKAGES[@]}"; do   
-        git clone $p 
-   if [ "$?" = "0" ]; then
-     ok $p
-     else
-     fail $p
-       done
+  fi
 }
 
 
