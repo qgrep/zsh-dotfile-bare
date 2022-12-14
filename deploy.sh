@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 banner() {
   printf "%s\n" \
     '
@@ -12,15 +11,22 @@ banner() {
       '
 }
 
+ok() { printf "$OK $1\n"; }
+fail() { printf "$FAIL $1\n"; }
+
 install () { 
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-
-git clone              https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k  $HOME
-   git clone           https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting  $HOME
-    git clone          https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions  $HOME
-    git clone          https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions  $HOME
-
- 
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+  ZSHPACKAGES=("https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k \
+              https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting \
+              https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions \
+              https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions"
+   for p in "${ZSHPACKAGES[@]}"; do   
+        git clone $p 
+   if [ "$?" = "0" ]; then
+     ok $p
+     else
+     fail $p
+       done
 }
 
 
@@ -29,15 +35,14 @@ git clone              https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM
 clone_repo_and_backup () {
 alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME $@'
 #dot clone --bare --recurse-submodules https://github.com/qgrep/zsh-dotfile-bare.git "$HOME/.dotfiles"
+
+DOTDIR="$HOME/.dotfiles"
+
 #------------------------------------------------------------------------------#
 # Download
 #------------------------------------------------------------------------------#
 echo "> Downloading dotfiles..."
-DOTDIR="$HOME/.dotfiles"
-
-if [ -d "$DOTDIR" ]; then
- rm -rf $DOTDIR
-fi
+[ -d "$DOTDIR" ] && rm -rf $DOTDIR
 git clone --quiet --bare https://github.com/qgrep/zsh-dotfile-bare "$DOTDIR"
 
 cmd() { git --git-dir="$DOTDIR" --work-tree="$HOME" "$@"; }
