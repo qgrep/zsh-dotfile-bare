@@ -37,10 +37,11 @@ alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME $@'
 # Download
 #------------------------------------------------------------------------------#
 echo "> Downloading dotfiles..."
-DOTDIR=.dotfiles
-dot clone --bare --recurse-submodules https://gitlab.raphael-christopher.de/xmg/zsh-dotfile-bare "$HOME/$DOTDIR"
 
-#wget -O /tmp/deploy.sh --no-check-certificate --content-disposition   https://raw.githubusercontent.com/qgrep/zsh-dotfile-bare/main/deploy.sh && chmod +x /tmp/deploy.sh && source /tmp/deploy.shdot() { git --git-dir="$HOME/$DOTDIR" --work-tree="$HOME" "$@"; }
+
+dot clone --bare --recurse-submodules https://github.com/qgrep/zsh-dotfile-bare.git "$HOME/.dotfiles"
+
+#wget -O /tmp/deploy.sh --no-check-certificate --content-disposition   https://raw.githubusercontent.com/qgrep/zsh-dotfile-bare/main/deploy.sh && chmod +x /tmp/deploy.sh && source /tmp/deploy.shdot() { git --git-dir="$HOME/$ddasdas" --work-tree="$HOME" "$@"; }
 
 #------------------------------------------------------------------------------#
 # Backup already existing dotfiles
