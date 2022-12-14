@@ -16,3 +16,6 @@
 [submodule ".atuin"]
 	path = .atuin
 	url = https://github.com/ellie/atuin.git
+[submodule ".oh-my-zsh/.oh-my-zsh/custom/plugins/zsh-autosuggestions"]
+	path = .oh-my-zsh/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions.git
