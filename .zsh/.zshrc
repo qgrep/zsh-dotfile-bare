@@ -155,7 +155,7 @@ zstyle ':completion:*' completer _complete _approximate _extensions _expand_alia
 #zstyle ':completion:*:descriptions' format "- %d -"
 #zstyle ':completion:*:corrections' format "- %d - (errors %e})"
 zstyle ':completion:*:default' list-prompt '%S%M matches%s'
-zstyle ':completion:*' group-name ''                                                # Required for completion to be in good groups (named after the tags)
+zstyle ':completion:*' group-name ''                                               # Required for completion to be in good groups (named after the tags)
 zstyle ':completion:*:manuals' separate-sections true
 zstyle ':completion:*:manuals.(^1*)' insert-sections true
 zstyle ':completion:*' verbose yes
@@ -165,18 +165,13 @@ zstyle -e ':completion:*:approximate:*' max-errors \
 
 zstyle ':completion:*:*:-subscript-:*' tag-order indexes parameters               # Array completion element sorting.
 
-# colorls 
+
 zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}!- %d (errors: %e) -!%f'
 zstyle ':completion:*:*:*:*:descriptions' format '%F{blue}-- %D %d --%f'
 zstyle ':completion:*:*:*:*:messages' format ' %F{purple} -- %d --%f'
 zstyle ':completion:*:*:*:*:warnings' format ' %F{red}-- no matches found --%f'
 
 
-#zstyle ':completion:*' list-colors '=(#b)(--[^ ]#)(*)=38;5;220;1=38;5;216'         # -- 
-#zstyle ':completion:*:parameters'  list-colors '=*=32'                             # ParameterGrün
-#zstyle ':completion:*:builtins' list-colors '=*=1;38;5;142'                        # builtins gelb
-#zstyle ':completion:*:commands' list-colors '=*=1;31'                              #commands in bolded red
-#zstyle ':completion:*:aliases' list-colors '=*=2;38;5;128'                         # alias purple
 
 
 zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
@@ -205,6 +200,16 @@ zstyle ':completion:*:man:*'                        menu yes select
 
 # Persistent rehash
 zstyle ':completion:*' rehash true
+
+
+# color
+#zstyle ':completion:*:options' list-colors '=(#b)(--[^ ]#)(*)=30;1;220;1=32;1;216' # 
+#zstyle ':completion:*' list-colors '=(#b)(--[^ ]#)(*)=38;5;220;1=38;5;216'          
+#zstyle ':completion:*:parameters'  list-colors '=*=32'                             # ParameterGrün
+#zstyle ':completion:*:builtins' list-colors '=*=1;38;5;142'                        # builtins gelb
+#zstyle ':completion:*:commands' list-colors '=*=1;31'                              #commands in bolded red
+#zstyle ':completion:*:aliases' list-colors '=*=2;38;5;128'                         # alias purple
+zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==34=34}:${(s.:.)LS_COLORS}")'
 
 
 # host completion /* add brackets as vim can't parse zsh's complex cmdlines 8-) {{{ */
