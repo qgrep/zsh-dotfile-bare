@@ -66,8 +66,8 @@ done
 # Install
 #------------------------------------------------------------------------------#
 dot checkout
-dot submodule --quiet init
-dot submodule --quiet update
+dot submodule init
+dot submodule update
 dot config status.showUntrackedFiles no
 echo "> Success! The following dotfiles have been installed to $HOME:"
 printf '    %s\n' "${files[@]}"
