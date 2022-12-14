@@ -67,7 +67,7 @@ echo "> Success! The following dotfiles have been installed to $HOME:"
 printf '    %s\n' "${files[@]}"
 }
 
-main () {}
+main () {
 banner
 install
 clone_repo_and_backup
