@@ -34,6 +34,8 @@ alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME $@'
 #------------------------------------------------------------------------------#
 echo "> Downloading dotfiles..."
 DOTDIR="$HOME/.dotfiles"
+
+[ -d "$DOTDIR" ] && rm -rf $DOTDIR
 git clone --quiet --bare https://github.com/qgrep/zsh-dotfile-bare "$DOTDIR"
 
 cmd() { git --git-dir="$DOTDIR" --work-tree="$HOME" "$@"; }
@@ -41,7 +43,7 @@ cmd() { git --git-dir="$DOTDIR" --work-tree="$HOME" "$@"; }
 #------------------------------------------------------------------------------#
 # Backup already existing dotfiles
 #------------------------------------------------------------------------------#
-[ -d "$DOTDIR" ] && rm -rf $DOTDIR
+
 DOTGITFILES=($(cmd ls-tree -r HEAD | awk '{print $NF}'))
 BACKUPDIR=.dotfiles.backup
 for f in "${DOTGITFILES[@]}"; do
