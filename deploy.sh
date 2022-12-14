@@ -73,15 +73,12 @@ for f in "${DOTGITFILES[@]}"; do
   # File at root ==> back up file
   if [[ $(basename "$f") = "$f" ]]; then
     [[ -f "$HOME/$f" ]] && mkdir -p "$HOME/$BACKUPDIR" && mv "$HOME/$f" "$HOME/$BACKUPDIR" && echo "> Backing up: $f ==> $BACKUPDIR/$f"
-  # File in nested directory ==> back up outermost directory
   else
     d=${f%%/*}
-    echo "d = $d"
-    echo "------------------------------------" 
-   # if [[ -d "$HOME/$d" ]]; then
-   #   [[ -d "$HOME/$BACKUPDIR/$d" ]] && rm -rf "$HOME/$BACKUPDIR/$d"
-    #  mkdir -p "$HOME/$BACKUPDIR" && mv "$HOME/$d" "$HOME/$BACKUPDIR" && echo "> Backing up: $d/ ==> $BACKUPDIR/$d/"
-   # fi
+    if [[ -d "$HOME/$d" ]]; then
+      [[ -d "$HOME/$BACKUPDIR/$d" ]] && rm -rf "$HOME/$BACKUPDIR/$d"
+      mkdir -p "$HOME/$BACKUPDIR" && mv "$HOME/$d" "$HOME/$BACKUPDIR" && echo "> Backing up: $d/ ==> $BACKUPDIR/$d/"
+    fi
   fi
 done
 
