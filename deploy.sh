@@ -13,14 +13,14 @@ banner() {
 }
 
 install () { 
-ZSHPACKAGES=("https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k \
-              https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting \
-              https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions \
-              https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions")
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
-       for p in "${ZSHPACKAGES[@]}"; do   
-        git clone $p $HOME
-       done
+git clone              https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k  $HOME
+   git clone           https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting  $HOME
+    git clone          https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions  $HOME
+    git clone          https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions  $HOME
+
+ 
 }
 
 
@@ -41,6 +41,7 @@ cmd() { git --git-dir="$DOTDIR" --work-tree="$HOME" "$@"; }
 #------------------------------------------------------------------------------#
 # Backup already existing dotfiles
 #------------------------------------------------------------------------------#
+[ -d "$DOTDIR" ] && rm -rf $DOTDIR
 DOTGITFILES=($(cmd ls-tree -r HEAD | awk '{print $NF}'))
 BACKUPDIR=.dotfiles.backup
 for f in "${DOTGITFILES[@]}"; do
