@@ -52,37 +52,11 @@ if type brew &>/dev/null
 export ZSH_THEME="powerlevel10k/powerlevel10k"
 
 
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-# Splitting the Zsh settings
-#for file in $ZDOTCONFIGDIR/**/*(.N)
-#do 
-#    source "$file" > /dev/null 2>&1 && echo "config file load: $file"
-#done
-
-
-# zsh funktionen
-#for file in $ZFUNC/**/*(.N)
-#do 
-#    source "$file"  && echo "zfunc file load: $file"
-#done
-
-# all of our zsh files
-#typeset -U config_files
-#config_files=($ZSH/**/*.zsh)
-
-# load the path files
-#for file in ${(M)config_files:#*/path.zsh}
-#do
-#     source "$file"  && echo "zfunc file load: $file"
-#done
-
-#for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
-#do
-#  source $file
-#done
-
+export ZSH_COMPDUMP=$ZSH/cache/.zcompdump-$HOST
+# cache 
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' accept-exact '*(N)'
+zstyle ':completion:*' cache-path "$ZSH/cache/.zcompdump-$HOST"
 
 # Sofortige Powerlevel10k-Eingabeaufforderung aktivieren.
 # Sollte nahe am Anfang von ~/.zshrc bleiben.
@@ -100,6 +74,10 @@ alias -s {index}="$BROWSER"
 alias -s {txt,md}="$MDEDITOR"
 alias -s {gif,GIF,jpeg,JPEG,jpg,JPG,png,PNG}="$IMAGEVIEWER"
 
+# aliasexpand   CTRL+A
+zle -C alias-expension complete-word _generic
+bindkey '^a' alias-expension
+zstyle ':completion:alias-expension:*' completer _expand_alias
 
 # VSCode
 #if [[ $TERM_PROGRAM == "vscode" ]]; then
@@ -163,11 +141,6 @@ zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower
   '+l:|?=** r:|?=**'
 
 
-#export ZSH_COMPDUMP=$ZSH/cache/.zcompdump-$HOST
-# cache 
-#zstyle ':completion:*' use-cache on
-#zstyle ':completion:*' accept-exact '*(N)'
-#zstyle ':completion:*' cache-path "$ZSH/cache/.zcompdump-$HOST"
 
 
 # Load compsys and one of its fancy modules
@@ -176,7 +149,7 @@ autoload -Uz compinit
 compinit
 
 # And set some styles...
-zstyle ':completion:*' completer _complete _approximate
+zstyle ':completion:*' completer _complete _approximate _extensions _expand_alias
 zstyle ':completion:*:descriptions' format "- %d -"
 zstyle ':completion:*:corrections' format "- %d - (errors %e})"
 zstyle ':completion:*:default' list-prompt '%S%M matches%s'
@@ -188,6 +161,22 @@ zstyle ':completion:*' verbose yes
 zstyle ':completion:*' rehash yes
 zstyle -e ':completion:*:approximate:*' max-errors \
           'reply=( $(( ($#PREFIX + $#SUFFIX) / 3 )) )'
+
+
+
+# color 
+#zstyle ':completion:*' list-colors '=(#b)(--[^ ]#)(*)=38;5;220;1=38;5;216'         # -- 
+#zstyle ':completion:*:parameters'  list-colors '=*=32'                             # ParameterGrün
+#zstyle ':completion:*:builtins' list-colors '=*=1;38;5;142'                        # builtins gelb
+#zstyle ':completion:*:commands' list-colors '=*=1;31'                              #commands in bolded red
+#zstyle ':completion:*:aliases' list-colors '=*=2;38;5;128'                         # alias purple
+
+
+zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
+zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
+
+zstyle ':completion:*:descriptions' format '%U%K{yellow} %F{green}-- %F{red} %B> %b%f %d --%f%k%u'
+# https://thevaluable.dev/zsh-completion-guide-examples/
 
 
 # complete manual by their section
