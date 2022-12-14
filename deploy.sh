@@ -41,9 +41,9 @@ antigen use oh-my-zsh
 antigen bundle git
 
 # Syntax highlighting bundle.
-antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle zsh-users/zsh-completions
 antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle zsh-syntax-highlighting
+antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle ellie/atuin@main
 
 # Load the theme.
@@ -78,10 +78,10 @@ for f in "${DOTGITFILES[@]}"; do
     d=${f%%/*}
     echo "d = $d"
     echo "------------------------------------" 
-    if [[ -d "$HOME/$d" ]]; then
-      [[ -d "$HOME/$BACKUPDIR/$d" ]] && rm -rf "$HOME/$BACKUPDIR/$d"
-      mkdir -p "$HOME/$BACKUPDIR" && mv "$HOME/$d" "$HOME/$BACKUPDIR" && echo "> Backing up: $d/ ==> $BACKUPDIR/$d/"
-    fi
+   # if [[ -d "$HOME/$d" ]]; then
+   #   [[ -d "$HOME/$BACKUPDIR/$d" ]] && rm -rf "$HOME/$BACKUPDIR/$d"
+    #  mkdir -p "$HOME/$BACKUPDIR" && mv "$HOME/$d" "$HOME/$BACKUPDIR" && echo "> Backing up: $d/ ==> $BACKUPDIR/$d/"
+   # fi
   fi
 done
 
