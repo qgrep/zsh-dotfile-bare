@@ -35,7 +35,7 @@ export XDG_CACHE_HOME="$HOME/.cache"        #  Wo benutzerspezifische nicht wese
 # zsh                                        
 export ZDOTDIR=${HOME}/.zsh
 export ZSH=${HOME}/.oh-my-zsh
-
+export DOTDIR=${HOME}/.dotfiles
 
 # .zsh
 export ZDOTCONFIGDIR=${ZDOTDIR}/config
