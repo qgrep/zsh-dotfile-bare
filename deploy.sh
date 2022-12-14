@@ -14,42 +14,44 @@ banner() {
 ok() { printf "$OK $1\n"; }
 fail() { printf "$FAIL $1\n"; }
 
-install () { 
-  if [ -d "$HOME/.oh-my-zsh" ]; then
-    ok
-else
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-  ZSHPACKAGES=("https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k \
-              https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting \
-              https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions \
-              https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions")
-  fi
-}
 
 
 
 
-clone_repo_and_backup () {
-alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME $@'
-#dot clone --bare --recurse-submodules https://github.com/qgrep/zsh-dotfile-bare.git "$HOME/.dotfiles"
+
+
 
 DOTDIR="$HOME/.dotfiles"
-
-#------------------------------------------------------------------------------#
-# Download
-#------------------------------------------------------------------------------#
-echo "> Downloading dotfiles..."
-[ -d "$DOTDIR" ] && dot pull ||
-git clone --quiet --bare https://github.com/qgrep/zsh-dotfile-bare "$DOTDIR"
-
+BACKUPDIR="$HOME/.dotfiles.backup"
+alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME $@'
 cmd() { git --git-dir="$DOTDIR" --work-tree="$HOME" "$@"; }
+#------------------------------------------------------------------------------#
+# check Download or UPDATE
+#------------------------------------------------------------------------------#
+
+if [ -d "$DOTDIR" ]; then
+echo "> updating dotfiles..."
+  dot pull 
+  exit 0
+else
+echo "> downloading dotfiles..."
+  dot clone --bare https://github.com/qgrep/zsh-dotfile-bare "$DOTDIR"
+  #dot clone --bare --recurse-submodules https://github.com/qgrep/zsh-dotfile-bare.git "$HOME/.dotfiles"
+   if [ ! -d "$HOME/.oh-my-zsh" ]; then
+      sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+       ZSHPACKAGES=("https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k \
+                     https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting \
+                     https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions \
+                     https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions")
+  fi
+fi
 
 #------------------------------------------------------------------------------#
 # Backup already existing dotfiles
 #------------------------------------------------------------------------------#
 
 DOTGITFILES=($(cmd ls-tree -r HEAD | awk '{print $NF}'))
-BACKUPDIR=.dotfiles.backup
+
 for f in "${DOTGITFILES[@]}"; do
   # File at root ==> back up file
   if [[ $(basename "$f") = "$f" ]]; then
@@ -74,9 +76,3 @@ echo "> Success! The following dotfiles have been installed to $HOME:"
 printf '    %s\n' "${files[@]}"
 }
 
-main () {
-banner
-install
-clone_repo_and_backup
-} >> /tmp/dotfiles.log
-main
