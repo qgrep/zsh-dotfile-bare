@@ -47,7 +47,7 @@ antigen bundle zsh-syntax-highlighting
 antigen bundle ellie/atuin@main
 
 # Load the theme.
-antigen theme powerlevel10k
+antigen theme bhilburn/powerlevel9k powerlevel9k
 
 # Tell Antigen that you're done.
 antigen apply

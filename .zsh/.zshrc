@@ -56,6 +56,7 @@ if type brew &>/dev/null
 #if [[  -f ~/.poshthemes/kushal.omp.json ]]; then 
 # eval "$(oh-my-posh --init --shell zsh --config ~/.poshthemes/kushal.omp.json)" 
 #fi
+POWERLEVEL9K_INSTALLATION_PATH=$ANTIGEN_BUNDLES/bhilburn/powerlevel9k
 export ZSH_THEME="powerlevel10k/powerlevel10k"
 
 
