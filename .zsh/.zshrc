@@ -9,6 +9,8 @@
 #  Tastenbelegungen                                             #
 #  zur interaktiven Nutzung etc.                                #
 #################################################################
+export TERM="xterm-256color" 
+
 export ZSH=${HOME}/.oh-my-zsh
 export ZDOTDIR=${HOME}/.zsh
 

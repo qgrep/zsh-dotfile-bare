@@ -13,46 +13,20 @@ banner() {
 }
 
 install () { 
-git clone --bare https://gitlab.raphael-christopher.de/xmg/zsh-dotfile-bare.git ~/.dotfiles
+ZSHPACKAGES=("https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k \
+              https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting \
+              https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions \
+              https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions")
 
-
-# oh my 
-banner sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-
-# p10
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
-exec zsh
-
-
-# plugins 
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions
+       for p in "${ZSHPACKAGES[@]}"; do   
+        git clone $p $HOME
+       done
 }
 
 
 
-curl -L git.io/antigen > $HOME/antigen.zsh
-source $HOME/antigen.zsh
-# Load the oh-my-zsh's library.
-antigen use oh-my-zsh
 
-# Bundles from the default repo (robbyrussell's oh-my-zsh).
-antigen bundle git
-
-# Syntax highlighting bundle.
-antigen bundle zsh-users/zsh-completions
-antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle ellie/atuin@main
-
-# Load the theme.
-antigen theme bhilburn/powerlevel9k powerlevel9k
-
-# Tell Antigen that you're done.
-antigen apply
-
-
+clone_repo_and_backup () {}
 alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME $@'
 #dot clone --bare --recurse-submodules https://github.com/qgrep/zsh-dotfile-bare.git "$HOME/.dotfiles"
 #------------------------------------------------------------------------------#
@@ -91,3 +65,11 @@ cmd submodule --quiet update
 cmd config status.showUntrackedFiles no
 echo "> Success! The following dotfiles have been installed to $HOME:"
 printf '    %s\n' "${files[@]}"
+}
+
+main () {}
+banner
+install
+clone_repo_and_backup
+} >> /tmp/dotfiles.log
+main
