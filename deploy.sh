@@ -33,10 +33,25 @@ git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-${ZSH:-~/.o
 
 
 
-antigen bundle $HOME/.oh-my-zsh/custom
+source $HOME/.antigen.zsh
+# Load the oh-my-zsh's library.
+antigen use oh-my-zsh
+
+# Bundles from the default repo (robbyrussell's oh-my-zsh).
+antigen bundle git
+
+# Syntax highlighting bundle.
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle zsh-syntax-highlighting
+# Load the theme.
+antigen theme powerlevel10k
+
+# Tell Antigen that you're done.
+antigen apply
 
 
-#alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME $@'
+alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME $@'
 #dot clone --bare --recurse-submodules https://github.com/qgrep/zsh-dotfile-bare.git "$HOME/.dotfiles"
 #------------------------------------------------------------------------------#
 # Download
@@ -44,6 +59,7 @@ antigen bundle $HOME/.oh-my-zsh/custom
 echo "> Downloading dotfiles..."
 DOTDIR="$HOME/.dotfiles"
 git clone --quiet --bare https://github.com/qgrep/zsh-dotfile-bare "$DOTDIR"
+
 cmd() { git --git-dir="$DOTDIR" --work-tree="$HOME" "$@"; }
 
 #------------------------------------------------------------------------------#
