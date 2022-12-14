@@ -35,7 +35,9 @@ alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME $@'
 echo "> Downloading dotfiles..."
 DOTDIR="$HOME/.dotfiles"
 
-[ -d "$DOTDIR" ] && rm -rf $DOTDIR
+fif [ -d "$DOTDIR" ]; then
+ rm -rf $DOTDIR
+fi
 git clone --quiet --bare https://github.com/qgrep/zsh-dotfile-bare "$DOTDIR"
 
 cmd() { git --git-dir="$DOTDIR" --work-tree="$HOME" "$@"; }
