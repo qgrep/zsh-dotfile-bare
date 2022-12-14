@@ -32,7 +32,7 @@ git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-${ZSH:-~/.o
 
 
 
-
+curl -L git.io/antigen > antigen.zsh
 source $HOME/.antigen.zsh
 # Load the oh-my-zsh's library.
 antigen use oh-my-zsh
@@ -44,6 +44,8 @@ antigen bundle git
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-syntax-highlighting
+antigen bundle ellie/atuin@main
+
 # Load the theme.
 antigen theme powerlevel10k
 
