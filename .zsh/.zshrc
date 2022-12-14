@@ -18,6 +18,13 @@ export ZDOTPLUGINSDIR=${ZDOTDIR}/plugins
 export ZFUNC=${ZDOTDIR}/zfunc
 export ZCOMPLETION=${ZDOTDIR}/completion
 
+# Load more completions
+fpath=($ZDOTDIR/completion $fpath)
+
+# Should be called before compinit
+zmodload zsh/complist
+
+
 for file in $ZDOTCONFIGDIR/**/*(.N)
 do 
     source "$file" > /dev/null 2>&1 && echo "config file load: $file"
@@ -74,10 +81,6 @@ alias -s {index}="$BROWSER"
 alias -s {txt,md}="$MDEDITOR"
 alias -s {gif,GIF,jpeg,JPEG,jpg,JPG,png,PNG}="$IMAGEVIEWER"
 
-# aliasexpand   CTRL+A
-zle -C alias-expension complete-word _generic
-bindkey '^a' alias-expension
-zstyle ':completion:alias-expension:*' completer _expand_alias
 
 # VSCode
 #if [[ $TERM_PROGRAM == "vscode" ]]; then
@@ -89,11 +92,12 @@ zstyle ':completion:alias-expension:*' completer _expand_alias
 #  fi
 #fi
 
+# aliasexpand   CTRL+A
+zle -C alias-expension complete-word _generic
+bindkey '^a' alias-expension
+zstyle ':completion:alias-expension:*' completer _expand_alias
 
-#precmd() { "$(ps -ocommand= -p $PPID | awk '{print $1}')" script -f $LOG }
-
-
-# Abschluss ohne Berücksichtigung der Groß-/Kleinschreibung l
+# Abschluss ohne Berücksichtigung der Groß-/Kleinschreibung 
 zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*'
 
 
@@ -141,30 +145,33 @@ zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower
   '+l:|?=** r:|?=**'
 
 
-
-
 # Load compsys and one of its fancy modules
 zmodload zsh/complist
 autoload -Uz compinit
 compinit
 
-# And set some styles...
-zstyle ':completion:*' completer _complete _approximate _extensions _expand_alias
-zstyle ':completion:*:descriptions' format "- %d -"
-zstyle ':completion:*:corrections' format "- %d - (errors %e})"
+
+zstyle ':completion:*' completer _complete _approximate _extensions _expand_alias   # Define completers
+#zstyle ':completion:*:descriptions' format "- %d -"
+#zstyle ':completion:*:corrections' format "- %d - (errors %e})"
 zstyle ':completion:*:default' list-prompt '%S%M matches%s'
-zstyle ':completion:*' group-name ''
+zstyle ':completion:*' group-name ''                                                # Required for completion to be in good groups (named after the tags)
 zstyle ':completion:*:manuals' separate-sections true
 zstyle ':completion:*:manuals.(^1*)' insert-sections true
-zstyle ':completion:*' menu select
 zstyle ':completion:*' verbose yes
 zstyle ':completion:*' rehash yes
 zstyle -e ':completion:*:approximate:*' max-errors \
           'reply=( $(( ($#PREFIX + $#SUFFIX) / 3 )) )'
 
+zstyle ':completion:*:*:-subscript-:*' tag-order indexes parameters               # Array completion element sorting.
+
+# colorls 
+zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}!- %d (errors: %e) -!%f'
+zstyle ':completion:*:*:*:*:descriptions' format '%F{blue}-- %D %d --%f'
+zstyle ':completion:*:*:*:*:messages' format ' %F{purple} -- %d --%f'
+zstyle ':completion:*:*:*:*:warnings' format ' %F{red}-- no matches found --%f'
 
 
-# color 
 #zstyle ':completion:*' list-colors '=(#b)(--[^ ]#)(*)=38;5;220;1=38;5;216'         # -- 
 #zstyle ':completion:*:parameters'  list-colors '=*=32'                             # ParameterGrün
 #zstyle ':completion:*:builtins' list-colors '=*=1;38;5;142'                        # builtins gelb
@@ -175,9 +182,21 @@ zstyle -e ':completion:*:approximate:*' max-errors \
 zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
 zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
 
-zstyle ':completion:*:descriptions' format '%U%K{yellow} %F{green}-- %F{red} %B> %b%f %d --%f%k%u'
-# https://thevaluable.dev/zsh-completion-guide-examples/
+# Group matches and describe.
+zstyle ':completion:*:*:*:*:*' menu select
+zstyle ':completion:*:matches' group 'yes'
+zstyle ':completion:*:options' description 'yes'
+zstyle ':completion:*:options' auto-description '%d'
+zstyle ':completion:*:corrections' format ' %F{green}-- %d (errors: %e) --%f'
+zstyle ':completion:*:descriptions' format ' %F{yellow}-- %d --%f'
+zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
+zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
+zstyle ':completion:*' format ' %F{yellow}-- %d --%f'
 
+
+# https://thevaluable.dev/zsh-completion-guide-examples/
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}                       # ls
+zstyle ':completion:*' file-list all                                                # cd
 
 # complete manual by their section
 zstyle ':completion:*:manuals'                      separate-sections true
@@ -186,19 +205,6 @@ zstyle ':completion:*:man:*'                        menu yes select
 
 # Persistent rehash
 zstyle ':completion:*' rehash true
-
-# faerbt man-pages ein
-man() {
-env \
-LESS_TERMCAP_mb=$(printf "\e[1;31m") \
-LESS_TERMCAP_md=$(printf "\e[1;31m") \
-LESS_TERMCAP_me=$(printf "\e[0m") \
-LESS_TERMCAP_se=$(printf "\e[0m") \
-LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
-LESS_TERMCAP_ue=$(printf "\e[0m") \
-LESS_TERMCAP_us=$(printf "\e[1;32m") \
-man "$@"
-}
 
 
 # host completion /* add brackets as vim can't parse zsh's complex cmdlines 8-) {{{ */
@@ -242,7 +248,7 @@ plugins=(
   ag
   fd
   web-search
-  zsh-interactive-cd
+ # zsh-interactive-cd
   zsh-syntax-highlighting
   adb
   git
