@@ -14,15 +14,15 @@
 # SETTINGS
 #------------------------------------------------------------------------------#
 
-DOTDIR="$HOME.dotfiles"
+DOTDIR=".dotfiles"
 BACKUPDIR=".dotfiles.backup"
 
 #------------------------------------------------------------------------------#
 # check Download or UPDATE
 #------------------------------------------------------------------------------#
 
-alias dot='git --git-dir=$DOTDIR --work-tree=$HOME $@'
-dot() { git --git-dir="$DOTDIR" --work-tree=$HOME "$@"; }
+alias dot='git --git-dir=$HOME/$DOTDIR --work-tree=$HOME $@'
+#dot() { git --git-dir="$DOTDIR" --work-tree="$HOME" "$@"; }
 
 
 if [ -d "$DOTDIR" ]; then
@@ -37,8 +37,8 @@ echo "> downloading dotfiles..."
 # DOWNLOAD dotfiles
 #------------------------------------------------------------------------------#
 
-  cd $HOME
-  dot clone --bare https://github.com/qgrep/zsh-dotfile-bare "$DOTDIR"
+
+  dot clone --bare https://github.com/qgrep/zsh-dotfile-bare $HOME/$DOTDIR 
   #dot clone --bare --recurse-submodules https://github.com/qgrep/zsh-dotfile-bare.git "$HOME/.dotfiles"
 
 #------------------------------------------------------------------------------#
