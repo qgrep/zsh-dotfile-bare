@@ -1,6 +1,5 @@
 #!/bin/bash
 
-banner() {
   printf "%s\n" \
     '
    @@@@@@@   @@@@@@  @@@@@@@ @@@@@@@@ @@@ @@@      @@@@@@@@  @@@@@@
@@ -9,42 +8,44 @@ banner() {
    !!:  !!! !!:  !!!   !!:   !!:      !!: !!:      !!:          !:!
    :: :  :   : :. :     :     :       :   : ::.: : : :: ::: ::.: : 
       '
-}
+
 
 #------------------------------------------------------------------------------#
 # SETTINGS
 #------------------------------------------------------------------------------#
 
-DOTDIR="${HOME}/.dotfiles"
-BACKUPDIR="${HOME}/.dotfiles.backup"
+DOTDIR="$HOME.dotfiles"
+BACKUPDIR=".dotfiles.backup"
 
 #------------------------------------------------------------------------------#
 # check Download or UPDATE
 #------------------------------------------------------------------------------#
 
 alias dot='git --git-dir=$DOTDIR --work-tree=$HOME $@'
-cmd() { git --git-dir="$DOTDIR" --work-tree="$HOME "$@"; }
+dot() { git --git-dir="$DOTDIR" --work-tree=$HOME "$@"; }
 
 
 if [ -d "$DOTDIR" ]; then
 echo "> updating dotfiles..."
   dot pull 
   exit 0
-else
+fi
+
 echo "> downloading dotfiles..."
 
 #------------------------------------------------------------------------------#
 # DOWNLOAD dotfiles
 #------------------------------------------------------------------------------#
 
-  dot clone --bare https://github.com/qgrep/zsh-dotfile-bare "$HOME"
+  cd $HOME
+  dot clone --bare https://github.com/qgrep/zsh-dotfile-bare "$DOTDIR"
   #dot clone --bare --recurse-submodules https://github.com/qgrep/zsh-dotfile-bare.git "$HOME/.dotfiles"
 
 #------------------------------------------------------------------------------#
 # Backup already existing dotfiles
 #------------------------------------------------------------------------------#
 
-DOTGITFILES=($(cmd ls-tree -r HEAD | awk '{print $NF}'))
+DOTGITFILES=($(dot ls-tree -r HEAD | awk '{print $NF}'))
 
 for f in "${DOTGITFILES[@]}"; do
   # File at root ==> back up file
@@ -63,11 +64,11 @@ done
 # INSTALL dotfiles
 #------------------------------------------------------------------------------#
 
-cmd checkout
-cmd submodule --quiet init
-cmd submodule --quiet update
-cmd config status.showUntrackedFiles no
-echo "> Success! The following dotfiles have been installed to $BACKUPDIR"
+dot checkout
+dot submodule --quiet init
+dot submodule --quiet update
+dot config status.showUntrackedFiles no
+[ -d "$BACKUPDIR" ] && echo "> Success! The following dotfiles have been installed to $BACKUPDIR"
 
 
 
